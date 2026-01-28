@@ -2,20 +2,19 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Inconsolata;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f5f5;
-    color: #333;
+    background: #ADBBDA;
 }
 
 /* Navbar */
 .navbar {
-    background: linear-gradient(135deg, #198754 0%, #157347 100%);
-    color: white;
+    background: #7091E6;
+    color: rgb(255, 255, 255);
     padding: 15px 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 20px #7091E6;
 }
 
 .nav-container {
@@ -31,38 +30,65 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 2.5rem;
+    font-weight: 900;
 }
 
 .nav-menu {
     display: flex;
     align-items: center;
     gap: 20px;
+
 }
 
-.nav-user {
+.nav-user,
+.logout-btn {
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 1.25rem;
 }
 
-.logout-btn {
+.profile-btn {
     padding: 8px 20px;
-    background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: rgb(255, 255, 255);
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
+
+}
+
+.profile-btn:hover {
+    background: rgba(121, 142, 188, 0.2);
+    color: #111730;
+    border: 1px solid #3D52A0;
+
+}
+
+.logout-btn {
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: rgb(255, 255, 255);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.4s ease;
 }
 
 .logout-btn:hover {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255, 0, 0, 0.1);
+    color: rgb(255, 0, 0);
+    border: 1px solid rgba(255, 0, 0, 0.9);
 }
+
 
 /* Container */
 .container {
@@ -76,24 +102,20 @@ body {
 }
 
 .page-header h1 {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 10px;
+    font-family: "Tourney";
+    font-size: 2.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.page-header h1 i {
-    color: #198754;
-}
-
-.page-header p {
-    color: #666;
-    font-size: 1.1rem;
-}
-
 /* Stats Grid */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -102,69 +124,40 @@ body {
 }
 
 .stat-card {
-    background: white;
-    border-radius: 15px;
-    padding: 25px;
+    font-family: "Press Start 2P";
+    font-size: 2rem;
+    background: #7091E6;
+    color: rgb(255, 255, 255);
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    padding: 20px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 5px 5px 30px #ffffff;
+    transition: all 0.6s ease;
+
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
-}
-
-.stat-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    color: white;
-}
-
-.stat-icon.orders {
-    background: linear-gradient(135deg, #198754 0%, #157347 100%);
-}
-
-.stat-icon.spent {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-}
-
-.stat-icon.pending {
-    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
-}
-
-.stat-content h3 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.stat-content p {
-    color: #666;
-    font-size: 0.9rem;
+    border: 1px solid #7091E6;
+    background: #EDE8F5;
+    color: rgb(0, 0, 0);
+    box-shadow: 5px 5px 30px #7091E6;
+    transition: all 0.6s ease;
 }
 
 /* Section */
 .section {
-    background: white;
     border-radius: 15px;
     padding: 30px;
     margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
+    background: #8697C4;
+    padding: 80px 200px 80px 200px;
+    border: 1px solid #ffffff;
+    border-radius: 20PX;
 
-.section-title {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #f0f0f0;
 }
 
 /* Actions Grid */
@@ -172,132 +165,98 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
+
 }
 
 .action-btn {
-    padding: 20px;
-    background: linear-gradient(135deg, #198754 0%, #157347 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
+    font-family: "Press Start 2P";
+    font-size: 1.5rem;
+    background: #7091E6;
+    color: rgb(255, 255, 255);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.action-btn.primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.action-btn i {
-    font-size: 2rem;
+    padding: 20px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 15px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #ffffff;
+    transition: all 0.4s ease;
 }
 
 .action-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 20px rgba(25, 135, 84, 0.4);
+    border: 1px solid #7091E6;
+    background: #EDE8F5;
+    color: rgb(0, 0, 0);
+    box-shadow: 0 0 40px #7091E6;
+    transition: all 0.4s ease;
 }
 
-.action-btn.primary:hover {
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+
+/* Tablet Styles (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .section {
+        padding: 60px 50px;
+        /* Reducing that 200px side padding */
+    }
+
+    .nav-brand {
+        font-size: 2rem;
+    }
+
+    .stat-card {
+        font-size: 1.5rem;
+    }
 }
 
-/* Table */
-.table-container {
-    overflow-x: auto;
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.data-table thead {
-    background: #f8f9fa;
-}
-
-.data-table th {
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    color: #333;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-.data-table td {
-    padding: 15px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.data-table tbody tr:hover {
-    background: #f8f9fa;
-}
-
-.status-badge {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.status-badge.pending {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.status-badge.completed {
-    background: #d4edda;
-    color: #155724;
-}
-
-.status-badge.processing {
-    background: #cfe2ff;
-    color: #084298;
-}
-
-.btn-sm {
-    padding: 5px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
-}
-
-.btn-sm.view {
-    background: #198754;
-    color: white;
-}
-
-.btn-sm.view:hover {
-    background: #157347;
-}
-
-.text-center {
-    text-align: center;
-}
-
-/* Responsive */
+/* Phone Styles (max-width: 768px) */
 @media (max-width: 768px) {
     .nav-container {
         flex-direction: column;
         gap: 15px;
+        text-align: center;
     }
-    
-    .stats-grid {
+
+    .nav-menu {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .page-header h1 {
+        font-size: 1.8rem;
+        flex-direction: column;
+    }
+
+    .stat-card {
+        font-size: 1.2rem;
+        padding: 15px;
+    }
+
+    .action-btn {
+        font-size: 1rem;
+        padding: 15px;
+    }
+
+    .section {
+        padding: 40px 20px;
+    }
+}
+
+/* Small Phone Styles (max-width: 480px) */
+@media (max-width: 480px) {
+
+    .stats-grid,
+    .actions-grid {
         grid-template-columns: 1fr;
     }
-    
-    .actions-grid {
-        grid-template-columns: repeat(2, 1fr);
+
+    .nav-brand {
+        font-size: 1.5rem;
     }
-    
-    .page-header h1 {
-        font-size: 2rem;
+
+    .profile-btn,
+    .logout-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
