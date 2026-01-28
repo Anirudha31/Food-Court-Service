@@ -14,9 +14,9 @@ const staffRoutes = require('./routes/staff');
 
 const app = express();
 
-// Security middleware
+
 app.use(helmet({
-  contentSecurityPolicy: false, // Disable CSP for development
+  contentSecurityPolicy: false, 
 }));
 app.use(cors({
   origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
@@ -26,7 +26,7 @@ app.use(cors({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100 
 });
 app.use(limiter);
 
