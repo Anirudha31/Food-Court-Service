@@ -1,0 +1,237 @@
+/* Common Login Styles */
+body {
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    backdrop-filter: blur(10px);
+}
+
+.form-body {
+    padding: 2rem;
+    background: white;
+    border-radius: 0 0 20px 20px;
+}
+
+.admin-header {
+    text-align: center;
+    padding: 2rem 2rem 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 20px 20px 0 0;
+}
+
+.admin-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #495057;
+}
+
+.form-check-input {
+    margin-right: 0.5rem;
+}
+
+.form-check-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.text-decoration-none {
+    text-decoration: none;
+    color: #0d6efd;
+}
+
+.text-decoration-none:hover {
+    text-decoration: underline;
+}
+
+/* Role-specific styles */
+.admin-header { color: #dc3545; }
+.student-header { color: #198754; }
+.staff-header { color: #ffc107; }
+.professor-header { color: #6f42c1; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .role-selector {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .role-btn {
+        width: 100%;
+    }
+    
+    .login-container {
+        padding: 10px;
+    }
+}
+
+/* Admin Login Styles */
+.admin-body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.admin-header {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+    border-radius: 20px 20px 0 0;
+}
+
+.admin-icon {
+    font-size: 4rem;
+    color: #ffc107;
+    margin-bottom: 1rem;
+}
+
+/* Student Login Styles */
+.student-body {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.student-header {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+    border-radius: 20px 20px 0 0;
+}
+
+.student-icon {
+    font-size: 4rem;
+    color: #ffc107;
+    margin-bottom: 1rem;
+}
+
+/* Staff Login Styles */
+.staff-body {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.staff-header {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+    border-radius: 20px 20px 0 0;
+}
+
+.staff-icon {
+    font-size: 4rem;
+    color: #ffc107;
+    margin-bottom: 1rem;
+}
+
+/* Common Button Styles */
+.btn-login {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.admin-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+}
+
+.admin-btn:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130);
+    color: white;
+    transform: scale(1.05);
+}
+
+.student-btn {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+}
+
+.student-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    color: white;
+    transform: scale(1.05);
+}
+
+.staff-btn {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: #212529;
+}
+
+.staff-btn:hover {
+    background: linear-gradient(135deg, #e0a800, #d39e00);
+    color: #212529;
+    transform: scale(1.05);
+}
+
+/* Form Styles */
+.form-label {
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-card {
+        margin: 1rem;
+        max-width: 100%;
+    }
+    
+    .admin-header, .student-header, .staff-header {
+        padding: 1.5rem 0;
+    }
+    
+    .admin-icon, .student-icon, .staff-icon {
+        font-size: 3rem;
+    }
+}

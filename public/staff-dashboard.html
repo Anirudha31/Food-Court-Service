@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - College Canteen</title>
+    <link rel="stylesheet" href="../css/staff-dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-utensils"></i>
+                <span>College Canteen</span>
+            </div>
+            <div class="nav-menu">
+                <span class="nav-user" id="userInfo">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Loading...</span>
+                </span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-user-tie"></i>
+                Staff Dashboard
+            </h1>
+            <p>Manage orders and verify QR codes</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="pendingOrders">0</h3>
+                    <p>Pending Orders</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon today">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="todayOrders">0</h3>
+                    <p>Today's Orders</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon served">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="servedOrders">0</h3>
+                    <p>Served Today</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="todayRevenue">₹0</h3>
+                    <p>Today's Revenue</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="section">
+            <h2 class="section-title">Quick Actions</h2>
+            <div class="actions-grid">
+                <button class="action-btn" onclick="scanQR()">
+                    <i class="fas fa-qrcode"></i>
+                    <span>Scan QR Code</span>
+                </button>
+                <button class="action-btn" onclick="viewPendingOrders()">
+                    <i class="fas fa-list"></i>
+                    <span>Pending Orders</span>
+                </button>
+                <button class="action-btn" onclick="viewMenu()">
+                    <i class="fas fa-utensils"></i>
+                    <span>View Menu</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pending Orders -->
+        <div class="section">
+            <h2 class="section-title">Pending Orders</h2>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>User</th>
+                            <th>Items</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../js/staff-dashboard.js"></script>
+</body>
+</html>

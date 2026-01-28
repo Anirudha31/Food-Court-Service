@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - College Canteen Management System</title>
+    <link rel="stylesheet" href="../css/login.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-card">
+                <!-- Role Selection -->
+                <div class="role-selector">
+                    <button class="role-btn active" data-role="admin">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin</span>
+                    </button>
+                    <button class="role-btn" data-role="student">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Student</span>
+                    </button>
+                    <button class="role-btn" data-role="professor">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Professor</span>
+                    </button>
+                    <button class="role-btn" data-role="staff">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Staff</span>
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <div class="form-container">
+                    <div class="form-header" id="formHeader">
+                        <i class="fas fa-user-shield" id="headerIcon"></i>
+                        <h2 id="formTitle">Administrator Login</h2>
+                        <p id="formSubtitle">College Canteen Management System</p>
+                    </div>
+                    
+                    <form id="loginForm">
+                        <div class="alert alert-error" id="errorAlert" style="display: none;">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span id="errorMessage"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="collegeId">
+                                <i class="fas fa-id-badge"></i>
+                                <span id="idLabel">College ID</span>
+                            </label>
+                            <input type="text" id="collegeId" name="collegeId" placeholder="Enter your College ID" required autocomplete="username">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">
+                                <i class="fas fa-lock"></i>
+                                Password
+                            </label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                        </div>
+                        
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rememberMe">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-link" onclick="alert('Please contact administrator to reset your password.'); return false;">
+                                Forgot Password?
+                            </a>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn" id="loginBtn">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+const express = require('express');
+const Razorpay = require('razorpay');
+const QRCode = require('qrcode');
+const { body, validationResult } = require('express-validator');
+const Payment = require('../models/Payment');
+const Order = require('../models/Order');
+const { authenticate, authorize } = require('../middleware/auth');
+
+const router = express.Router();
+
+// Initialize Razorpay
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
+});
+
+// Create payment order
+router.post('/create-order', authenticate, [
+  body('order_id').notEmpty().withMessage('Order ID is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { order_id } = req.body;
+
+    // Get order details
+    const order = await Order.findOne({ order_id, user_id: req.user._id });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    if (order.payment_status !== 'pending') {
+      return res.status(400).json({ message: 'Order is already paid or cancelled' });
+    }
+
+    // Create Razorpay order
+    const razorpayOrder = await razorpay.orders.create({
+      amount: order.total_amount * 100, // Convert to paise
+      currency: 'INR',
+      receipt: order.order_id,
+      notes: {
+        user_id: req.user._id.toString(),
+        order_id: order.order_id
+      }
+    });
+
+    // Create payment record
+    const payment = new Payment({
+      payment_id: `PAY_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
+      order_id: order.order_id,
+      user_id: req.user._id,
+      payment_gateway_id: razorpayOrder.id,
+      payer_name: req.user.name,
+      amount: order.total_amount,
+      status: 'created'
+    });
+
+    await payment.save();
+
+    res.json({
+      message: 'Payment order created successfully',
+      razorpay_order: razorpayOrder,
+      payment_id: payment.payment_id,
+      amount: order.total_amount
+    });
+  } catch (error) {
+    console.error('Create payment order error:', error);
+    res.status(500).json({ message: 'Server error while creating payment order' });
+  }
+});
+
+// Verify payment and generate QR code
+router.post('/verify', authenticate, [
+  body('razorpay_order_id').notEmpty().withMessage('Razorpay order ID is required'),
+  body('razorpay_payment_id').notEmpty().withMessage('Razorpay payment ID is required'),
+  body('razorpay_signature').notEmpty().withMessage('Razorpay signature is required'),
+  body('payment_id').notEmpty().withMessage('Payment ID is required')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      payment_id
+    } = req.body;
+
+    // Get payment record
+    const payment = await Payment.findOne({ payment_id, user_id: req.user._id });
+    if (!payment) {
+      return res.status(404).json({ message: 'Payment record not found' });
+    }
+
+    // Verify payment signature
+    const crypto = require('crypto');
+    const generated_signature = crypto
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest('hex');
+
+    if (generated_signature !== razorpay_signature) {
+      return res.status(400).json({ message: 'Invalid payment signature' });
+    }
+
+    // Update payment record
+    payment.payment_gateway_id = razorpay_payment_id;
+    payment.status = 'captured';
+    payment.payment_time = new Date();
+    await payment.save();
+
+    // Get order details
+    const order = await Order.findOne({ order_id: payment.order_id });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Update order payment status
+    order.payment_status = 'paid';
+    order.payment_id = payment_id;
+    await order.save();
+
+    // Generate QR code data
+    const qrData = {
+      order_id: order.order_id,
+      payer_name: req.user.name,
+      college_id: req.user.college_id,
+      items: order.items.map(item => ({
+        dish: item.dish_name,
+        qty: item.quantity
+      })),
+      amount: order.total_amount,
+      payment_status: 'PAID',
+      payment_time: payment.payment_time
+    };
+
+    // Generate QR code
+    const qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(qrData));
+
+    // Save QR code data to order
+    order.qr_code_data = JSON.stringify(qrData);
+    await order.save();
+
+    res.json({
+      message: 'Payment verified successfully',
+      payment,
+      order,
+      qr_code: qrCodeDataUrl,
+      qr_data: qrData
+    });
+  } catch (error) {
+    console.error('Verify payment error:', error);
+    res.status(500).json({ message: 'Server error while verifying payment' });
+  }
+});
+
+// Get payment history
+router.get('/history', authenticate, async (req, res) => {
+  try {
+    const { page = 1, limit = 10, status } = req.query;
+    const skip = (page - 1) * limit;
+    const userId = req.user._id;
+
+    let filter = { user_id: userId };
+    if (status) filter.status = status;
+
+    const payments = await Payment.find(filter)
+      .sort({ payment_time: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Payment.countDocuments(filter);
+
+    res.json({
+      message: 'Payment history retrieved successfully',
+      payments,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalItems: total,
+        itemsPerPage: parseInt(limit)
+      }
+    });
+  } catch (error) {
+    console.error('Get payment history error:', error);
+    res.status(500).json({ message: 'Server error while fetching payment history' });
+  }
+});
+
+// Get payment by ID
+router.get('/:id', authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id;
+
+    let payment;
+    if (req.user.role === 'admin' || req.user.role === 'staff') {
+      payment = await Payment.findById(id);
+    } else {
+      payment = await Payment.findOne({ payment_id: id, user_id: userId });
+    }
+
+    if (!payment) {
+      return res.status(404).json({ message: 'Payment not found' });
+    }
+
+    res.json({
+      message: 'Payment retrieved successfully',
+      payment
+    });
+  } catch (error) {
+    console.error('Get payment error:', error);
+    res.status(500).json({ message: 'Server error while fetching payment' });
+  }
+});
+
+// Process refund (admin only)
+router.post('/:id/refund', authenticate, authorize('admin'), [
+  body('refund_amount').isNumeric().withMessage('Refund amount must be a number').isFloat({ min: 0 }).withMessage('Refund amount must be positive')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { id } = req.params;
+    const { refund_amount, reason } = req.body;
+
+    const payment = await Payment.findById(id);
+    if (!payment) {
+      return res.status(404).json({ message: 'Payment not found' });
+    }
+
+    if (payment.status !== 'captured') {
+      return res.status(400).json({ message: 'Cannot refund. Payment is not captured.' });
+    }
+
+    if (refund_amount > payment.amount) {
+      return res.status(400).json({ message: 'Refund amount cannot exceed payment amount' });
+    }
+
+    // Process refund with Razorpay
+    try {
+      const refund = await razorpay.payments.refund(payment.payment_gateway_id, {
+        amount: refund_amount * 100 // Convert to paise
+      });
+
+      // Update payment record
+      payment.refund_id = refund.id;
+      payment.refund_amount = refund_amount;
+      payment.refund_time = new Date();
+      payment.status = 'refunded';
+      await payment.save();
+
+      // Update order status
+      const order = await Order.findOne({ order_id: payment.order_id });
+      if (order) {
+        order.payment_status = 'refunded';
+        await order.save();
+      }
+
+      res.json({
+        message: 'Refund processed successfully',
+        refund,
+        payment
+      });
+    } catch (razorpayError) {
+      console.error('Razorpay refund error:', razorpayError);
+      res.status(500).json({ message: 'Failed to process refund with payment gateway' });
+    }
+  } catch (error) {
+    console.error('Process refund error:', error);
+    res.status(500).json({ message: 'Server error while processing refund' });
+  }
+});
+
+// Get all payments (admin/staff only)
+router.get('/manage/all', authenticate, authorize('admin', 'staff'), async (req, res) => {
+  try {
+    const { page = 1, limit = 20, status, date, userId } = req.query;
+    const skip = (page - 1) * limit;
+
+    let filter = {};
+    if (status) filter.status = status;
+    if (userId) filter.user_id = userId;
+    if (date) {
+      const targetDate = new Date(date);
+      const startOfDay = new Date(targetDate);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(targetDate);
+      endOfDay.setHours(23, 59, 59, 999);
+      filter.payment_time = { $gte: startOfDay, $lte: endOfDay };
+    }
+
+    const payments = await Payment.find(filter)
+      .sort({ payment_time: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Payment.countDocuments(filter);
+
+    res.json({
+      message: 'Payments retrieved successfully',
+      payments,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalItems: total,
+        itemsPerPage: parseInt(limit)
+      }
+    });
+  } catch (error) {
+    console.error('Get all payments error:', error);
+    res.status(500).json({ message: 'Server error while fetching payments' });
+  }
+});
+
+module.exports = router;

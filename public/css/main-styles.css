@@ -1,0 +1,163 @@
+/* Main Landing Page Styles */
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+}
+
+.login-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.login-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.role-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.admin-icon { color: #dc3545; }
+.student-icon { color: #007bff; }
+.staff-icon { color: #ffc107; }
+
+.role-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.role-description {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+.login-btn {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.admin-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+}
+
+.admin-btn:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130);
+    color: white;
+    transform: scale(1.05);
+}
+
+.student-btn {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+}
+
+.student-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    color: white;
+    transform: scale(1.05);
+}
+
+.staff-btn {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: #212529;
+}
+
+.staff-btn:hover {
+    background: linear-gradient(135deg, #e0a800, #d39e00);
+    color: #212529;
+    transform: scale(1.05);
+}
+
+.features-section {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 3rem 0;
+    margin-top: 3rem;
+    backdrop-filter: blur(10px);
+}
+
+.feature-item {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: #ffc107;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    .login-cards {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+    .login-card {
+        padding: 1.5rem;
+    }
+    .role-icon {
+        font-size: 3rem;
+    }
+}
+
+/* Animation for cards on scroll */
+.login-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.login-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
