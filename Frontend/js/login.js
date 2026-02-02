@@ -1,41 +1,54 @@
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+    const toggleBtn = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#password');
     
-    // Get values and trim whitespace
-    const collegeId = document.getElementById('collegeId').value.trim();
-    const passwordInput = document.getElementById('password').value;
-    const errorMsg = document.getElementById('errorMessage');
+    if (toggleBtn && passwordInput) {
+        toggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
 
-    // Reset error message state
-    errorMsg.style.display = 'none';
-
-    try {
-        // Use api.js to send login request
-        // Keys must be snake_case to match Backend routes/auth.js
-        const responseData = await api.login({ 
-            college_id: collegeId, 
-            password: passwordInput 
+            const icon = toggleBtn.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
         });
+    }
 
-        // Save Auth Data
-        localStorage.setItem('token', responseData.token);
-        localStorage.setItem('user', JSON.stringify(responseData.user));
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        // Redirect based on Role
-        const userRole = responseData.user.role;
-        
-        if (userRole === 'admin') {
-            window.location.href = '../html/admin.html';
-        } else if (userRole === 'staff') {
-            window.location.href = '../html/staff.html';
-        } else {
-            // Students and Professors/Teachers use the same ordering dashboard
-            window.location.href = '../html/student.html';
-        }
-        
-    } catch (err) {
-        // Display error message from server or default
-        errorMsg.style.display = 'block';
-        errorMsg.innerText = err.response?.data?.message || "Login failed. Please check your credentials.";
+            const collegeId = document.getElementById('collegeId').value.trim();
+            const passwordValue = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+
+
+            errorMsg.style.display = 'none';
+
+            try {
+                const responseData = await api.login({
+                    college_id: collegeId,
+                    password: passwordValue
+                });
+
+                localStorage.setItem('token', responseData.token);
+                localStorage.setItem('user', JSON.stringify(responseData.user));
+
+                const userRole = responseData.user.role;
+                if (userRole === 'admin') {
+                    window.location.href = '../html/admin.html';
+                } else if (userRole === 'staff') {
+                    window.location.href = '../html/staff.html';
+                } else {
+                    window.location.href = '../html/student.html';
+                }
+
+            } catch (err) {
+                errorMsg.style.display = 'block';
+                errorMsg.innerText = err.response?.data?.message || "Login failed. Check your ID or Password.";
+            }
+        });
     }
 });

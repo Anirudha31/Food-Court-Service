@@ -1,41 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Canteen Portal</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignIn&SignUp</title>
+    <link rel="stylesheet" type="text/css" href="../css/login.css" />
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="./style.css">
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+            integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+        <title>Login Page</title>
+    </head>
+
 <body>
-    <div class="login-container">
-        <div class="login-box">
-            <div class="brand" style="justify-content: center; margin-bottom: 1.5rem;">
-                <i class="fas fa-utensils"></i> FoodCourt
+    <div class="head_logo">
+        <img src="../src/Brainware_University.webp" alt="Logo">
+    </div>
+
+    <div class="flex-r container">
+        <div class="flex-r login-wrapper">
+            <div class="login-text">
+                <div class="logo">
+                    <span><b>FoodCourt</b></span>
+                </div>
+                <h1>Sign In</h1>
+
+                <form class="flex-c" id="loginForm">
+                    <div class="input-box">
+                        <span class="label">Your ID</span>
+                        <div class="flex-r input">
+                            <input type="text" id="collegeId" placeholder="BWU/???/??/???" required>
+                        </div>
+                    </div>
+
+                    <div class="input-box">
+                        <span class="label">Password</span>
+                        <div class="flex-r input">
+                            <input type="password" placeholder="Password" id="password" required>
+                            <button type="button" class="pass_view" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="errorMessage"></div>
+
+                    <input class="btn" type="submit" value="Sign In">
+                </form>
             </div>
-            
-            <form id="loginForm">
-                <div class="input-group">
-                    <label>College ID</label>
-                    <input type="text" id="collegeId" placeholder="User ID" required>
-                </div>
-                
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
-                </div>
-
-                <div id="errorMessage" style="color: #ef4444; margin-bottom: 1rem; display: none; font-size: 0.9rem;"></div>
-
-                <button type="submit" class="btn" style="width: 100%;">
-                    Secure Login <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
-                </button>
-            </form>
         </div>
     </div>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/login.js"></script>
 </body>
+
 </html>

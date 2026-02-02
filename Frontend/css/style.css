@@ -1,15 +1,12 @@
-/* =========================================
-   1. VARIABLES & RESET
-   ========================================= */
 :root {
     /* Color Palette - Futuristic White/Blue */
     --bg-main: #f8fafc;       /* Ultra light blue-grey background */
     --surface: #ffffff;       /* Pure white surfaces */
-    --primary: #2563eb;       /* Royal Blue Accent */
-    --primary-dark: #1d4ed8;  /* Darker Blue for hover */
+    --primary: #0e3cb8;       /* Royal Blue Accent */
+    --primary-dark: #0b2d89;  /* Darker Blue for hover */
     --secondary: #64748b;     /* Slate Grey for secondary text */
-    --text-main: #0f172a;     /* Deep dark blue for main text */
-    --border: #e2e8f0;        /* Light grey borders */
+    --text-main: #0f172a;    
+    --border: #e2e8f0;        
     
     /* Status Colors */
     --success: #10b981;

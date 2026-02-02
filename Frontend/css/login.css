@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background: #E5E5E5;
+}
+
+.flex-r {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.flex-c {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.head_logo img {
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.head_logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    background: #E5E5E5;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.login-text {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    min-height: 500px;
+    border-radius: 45px;
+    padding: 30px 20px;
+
+}
+
+.logo {
+    background: linear-gradient(to right, red, #0e3cb8);
+    margin-bottom: 20px;
+    display: flex;
+    box-shadow: 0 1px 3px #444242;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px; 
+}
+
+.logo span {
+    margin: 2px;
+    font-size: 40px;
+    color: #ffffff;
+
+}
+
+.login-text h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #0e3cb8;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.input-box {
+    margin: 10px 0px;
+    width: 100%;
+}
+
+.label {
+    display: block;
+    font-size: 14px;
+    color: black;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.input {
+    background-color: #F6F6F6;
+    padding: 0px 15px;
+    border: 1px solid #0e3cb8;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.input input {
+    border: none;
+    outline: none;
+    padding: 12px 10px;
+    background-color: transparent;
+    flex: 1;
+    font-size: 16px;
+    color: #0e3cb8;
+}
+
+.input i {
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 16px;
+}
+
+.pass_view {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    outline: none;
+    flex-shrink: 0;
+}
+
+.pass_view i {
+    color: #0e3cb8;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.pass_view i:hover {
+    color: #000000;
+}
+
+.btn {
+    width: 100%;
+    color: #ffffff;
+    box-shadow: 0 1px 3px #444242;
+    border-radius: 30px;
+    padding: 12px;
+    background: #0e3cb8;
+    border: none;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #000000ea;
+    color: #ffffff;
+    box-shadow: 0 1px 3px #444242;
+}
+
+#errorMessage {
+    color: red;
+    font-size: 15px;
+}
+
+@media screen and (max-width: 768px) {
+
+    .login-text h1 {
+        font-size: 28px;
+    }
+
+    .logo span {
+        font-size: 30px;
+        margin: 8px;
+        padding: 0px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        background: #ffffff;
+    }
+
+    .container {
+        padding: 10px;
+        background: #ffffff;
+    }
+
+    .head_logo {
+        background: #ffffff;
+    }
+
+    .login-text {
+        max-width: 100%;
+        border-radius: 25px;
+        box-shadow: none;
+        padding: 20px 10px;
+    }
+
+    .input {
+        padding: 5px 10px;
+    }
+
+    .input input {
+        font-size: 14px;
+        padding: 10px 5px;
+    }
+
+    .btn {
+        margin-top: 20px;
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    #errorMessage {
+        color: rgb(213, 0, 0);
+        font-size: 12px;
+    }
+
+
+}
