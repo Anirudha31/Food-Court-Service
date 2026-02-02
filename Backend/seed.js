@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-const User = require('./models/User'); // Ensure this path matches your folder structure
+const User = require('./models/User');
 require('dotenv').config();
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log(' MongoDB Connected. Seeding data...'))
     .catch(err => {
@@ -12,7 +11,6 @@ mongoose.connect(process.env.MONGODB_URI)
 
 const seedData = async () => {
     try {
-        // Clear existing users to prevent "Duplicate Key" errors
         await User.deleteMany({});
         console.log('Existing users cleared.');
 
@@ -21,7 +19,7 @@ const seedData = async () => {
             name: 'System Admin',
             college_id: 'admin1',
             email: 'admin@college.edu',
-            password: 'admin123', // Minimum 6 characters
+            password: 'admin123',
             role: 'admin',
             status: 'active',
             department: 'Administration'
@@ -31,23 +29,44 @@ const seedData = async () => {
 
         // 2. Create Student
         const student = new User({
-            name: 'Rahul Student',
-            college_id: 'STU1',
-            email: 'rahul@college.edu',
-            password: 'student123', // Fixed: was "pass" (too short)
+            name: 'Anirudha Khanrah',
+            college_id: 'BWU/BTS/24/269',
+            email: 'anirudha@college.edu',
+            password: 'anirudha123',
             role: 'student',
             status: 'active',
             department: 'Computer Science'
         });
         await student.save();
-        console.log('Student User Created: STU1 / student123');
+
+        const student = new User({
+            name: 'Rana Pratap Chaulya',
+            college_id: 'BWU/BTS/24/279',
+            email: 'rana@college.edu',
+            password: 'ranapratap123',
+            role: 'student',
+            status: 'active',
+            department: 'Computer Science'
+        });
+        await student.save();
+
+        const student = new User({
+            name: 'Sayak Dsa',
+            college_id: 'BWU/BTS/24/299',
+            email: 'sayak@college.edu',
+            password: 'sayakdas123',
+            role: 'student',
+            status: 'active',
+            department: 'Computer Science'
+        });
+        await student.save();
 
         // 3. Create Staff
         const staff = new User({
             name: 'Canteen Staff',
             college_id: 'STAFF1',
             email: 'staff@college.edu',
-            password: 'staff123', // Fixed: was "pass" (too short)
+            password: 'staff123',
             role: 'staff',
             status: 'active',
             department: 'Canteen Operations'
@@ -60,7 +79,7 @@ const seedData = async () => {
             name: 'Dr. Sharma',
             college_id: 'PROF1',
             email: 'sharma@college.edu',
-            password: 'prof123', // Fixed: was "pass" (too short)
+            password: 'prof123',
             role: 'professor',
             status: 'active',
             department: 'Physics'
@@ -72,8 +91,7 @@ const seedData = async () => {
         process.exit();
 
     } catch (error) {
-        console.error('\n Seeding Error:', error.message);
-        // This shows exactly which field failed validation
+        console.error('\n Seeding Error:', error.message); n
         if (error.errors) {
             console.error('Validation Details:', Object.keys(error.errors).map(key => ({
                 field: key,
