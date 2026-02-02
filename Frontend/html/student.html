@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FoodCourt - Order</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="brand"><i class="fas fa-utensils"></i> FoodCourt</div>
+            <nav class="nav-links">
+                <button class="nav-link active" onclick="showSection('menu')">Menu</button>
+                <button class="nav-link" onclick="showSection('orders')">My Orders</button>
+                <button class="nav-link" onclick="showSection('wallet')">Wallet</button>
+                <button class="nav-link logout" onclick="logout()">Logout</button>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <h2>Hungry?</h2>
+                <div class="user-info">
+                    <span id="studentName">Student</span>
+                    <button class="btn btn-outline" onclick="viewCart()">
+                        <i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <div id="menuSection" class="stats-grid">
+                </div>
+
+            <div id="ordersSection" style="display:none;">
+                <h3>Your Order History</h3>
+                <div id="historyList" class="card"></div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/student.js"></script>
+</body>
+</html>

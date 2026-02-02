@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Canteen Portal</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="brand" style="justify-content: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-utensils"></i> FoodCourt
+            </div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label>College ID</label>
+                    <input type="text" id="collegeId" placeholder="User ID" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+
+                <div id="errorMessage" style="color: #ef4444; margin-bottom: 1rem; display: none; font-size: 0.9rem;"></div>
+
+                <button type="submit" class="btn" style="width: 100%;">
+                    Secure Login <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/login.js"></script>
+</body>
+</html>

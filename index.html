@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - FoodCourt</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span>FoodCourt</span>
+            </div>
+            <div class="nav-menu">
+                <button class="profile-btn" onclick="switchTab('profile')">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="navUserName">Student</span>
+                </button>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>DASHBOARD</h2>
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-actions">
+                <button class="side-action-btn primary" onclick="switchTab('menu', this)">
+                    <i class="fas fa-utensils"></i> View Menu
+                </button>
+                <button class="side-action-btn" onclick="switchTab('orders', this)">
+                    <i class="fas fa-history"></i> My Orders
+                </button>
+                <button class="side-action-btn" onclick="switchTab('spend', this)">
+                    <i class="fas fa-wallet"></i> Total Spend
+                </button>
+                <button class="side-action-btn" onclick="switchTab('support', this)">
+                    <i class="fas fa-headset"></i> Support
+                </button>
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <p id="studentCode"><i class="fas fa-id-card"></i> CODE: 2024-STU</p>
+        </div>
+    </aside>
+
+    <main class="container" id="main-content">
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
