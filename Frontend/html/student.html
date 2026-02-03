@@ -1,45 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>FoodCourt - Order</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodCourt - Dashboard</title>
+    <link rel="stylesheet" href="../css/student.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
-    <div class="dashboard">
-        <aside class="sidebar">
-            <div class="brand"><i class="fas fa-utensils"></i> FoodCourt</div>
-            <nav class="nav-links">
-                <button class="nav-link active" onclick="showSection('menu')">Menu</button>
-                <button class="nav-link" onclick="showSection('orders')">My Orders</button>
-                <button class="nav-link" onclick="showSection('wallet')">Wallet</button>
-                <button class="nav-link logout" onclick="logout()">Logout</button>
-            </nav>
-        </aside>
 
-        <main class="content">
-            <header class="header">
-                <h2>Hungry?</h2>
-                <div class="user-info">
-                    <span id="studentName">Student</span>
-                    <button class="btn btn-outline" onclick="viewCart()">
-                        <i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span>
-                    </button>
-                </div>
-            </header>
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-            <div id="menuSection" class="stats-grid">
-                </div>
+<div class="dashboard">
+    <aside class="sidebar">
+        <div class="brand">FoodCourt</div>
+        <nav class="nav-links">
+            <button class="nav-link active" onclick="showSection('menu')">
+                <i class="fas fa-th-large"></i> Menu
+            </button>
+            <button class="nav-link" onclick="showSection('orders')">
+                <i class="fas fa-shopping-bag"></i> My Orders
+            </button>
+            <button class="nav-link" onclick="showSection('wallet')">
+                <i class="fas fa-wallet"></i> Wallet
+            </button>
+            <button class="nav-link logout" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </nav>
+    </aside>
 
-            <div id="ordersSection" style="display:none;">
-                <h3>Your Order History</h3>
-                <div id="historyList" class="card"></div>
+    <main class="content">
+        <header class="header">
+            <button class="mobile-toggle" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="user-actions">
+                <button class="cart-btn" onclick="viewCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cartCount" class="badge">0</span>
+                </button>
             </div>
-        </main>
-    </div>
+
+            <div class="greeting">
+                <h2>Welcome, <span id="studentName">Student</span></h2>
+                <p>What would you like to eat today?</p>
+            </div>
+        </header>
+
+        <section id="menuSection" class="food-grid"></section>
+
+        <section id="ordersSection" style="display:none;">
+            <h3>Order History</h3>
+            <div id="historyList"></div>
+        </section>
+    </main>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/student.js"></script>
 </body>
+
 </html>

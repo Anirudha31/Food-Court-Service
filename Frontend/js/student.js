@@ -116,3 +116,38 @@ function logout() {
     localStorage.clear();
     window.location.href = 'login.html';
 }
+
+
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+
+;;
+function showSection(sectionId) {
+    const sections = ['menuSection', 'ordersSection'];    
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    const activeSection = document.getElementById(`${sectionId}Section`);
+    if (activeSection) {
+        activeSection.style.display = (sectionId === 'menu') ? 'grid' : 'block';
+    }
+
+    // Load data
+    if (sectionId === 'menu') loadMenu();
+    if (sectionId === 'orders') loadHistory();
+
+    // CLOSE SIDEBAR ON MOBILE
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar.classList.contains('active')) {
+        toggleSidebar();
+    }
+}
