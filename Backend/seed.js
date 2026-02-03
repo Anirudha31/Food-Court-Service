@@ -8,17 +8,16 @@ mongoose.connect(process.env.MONGODB_URI)
         seedData();
     })
     .catch(err => {
-        console.error('MongoDB Connection Error:', err);
+        console.error(' MongoDB Connection Error:', err);
         process.exit(1);
     });
 
 const seedData = async () => {
     try {
         await User.deleteMany({});
-        console.log('Existing users cleared.');
+        console.log(' Existing users cleared.');
 
-        const users = [
-            // 1. Admin
+        const usersData = [
             {
                 name: 'System Admin',
                 college_id: 'admin1',
@@ -28,7 +27,6 @@ const seedData = async () => {
                 status: 'active',
                 department: 'Administration'
             },
-            // 2. Students
             {
                 name: 'Anirudha Khanrah',
                 college_id: 'BWU/BTS/24/269',
@@ -56,7 +54,6 @@ const seedData = async () => {
                 status: 'active',
                 department: 'Computer Science'
             },
-            // 3. Staff
             {
                 name: 'Canteen Staff',
                 college_id: 'STAFF1',
@@ -66,7 +63,6 @@ const seedData = async () => {
                 status: 'active',
                 department: 'Canteen Operations'
             },
-            // 4. Professor
             {
                 name: 'Dr. Sharma',
                 college_id: 'PROF1',
@@ -78,21 +74,15 @@ const seedData = async () => {
             }
         ];
 
-        await User.insertMany(users);
+        for (const data of usersData) {
+            const newUser = new User(data);
+            await newUser.save();
+        }
         
-        console.log('Successfully seeded ' + users.length + ' users!');
-        console.log('Admin: admin1 / admin123');
-        console.log('Student: BWU/BTS/24/269 / anirudha123');
         
         process.exit();
     } catch (error) {
-        console.error('\n❌ Seeding Error:', error.message);
-        if (error.errors) {
-            console.error('Validation Details:', Object.keys(error.errors).map(key => ({
-                field: key,
-                message: error.errors[key].message
-            })));
-        }
+        console.error('\n Seeding Error:', error.message);
         process.exit(1);
     }
 };
