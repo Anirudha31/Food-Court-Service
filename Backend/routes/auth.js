@@ -6,6 +6,12 @@ const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
 
+
+if (!process.env.JWT_SECRET) {
+    console.error("FATAL ERROR: JWT_SECRET is not defined.");
+    process.exit(1); // Stop the server if the secret is missing
+}
+
 // Generate JWT token
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '24h' });
