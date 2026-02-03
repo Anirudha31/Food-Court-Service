@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://food-court-service.onrender.com/api';
 
 const api = {
     // Helper for requests
@@ -7,7 +7,7 @@ const api = {
         const config = {
             method,
             url: `${API_BASE}${endpoint}`,
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token ? `Bearer ${token}` : ''
             }

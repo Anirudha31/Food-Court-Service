@@ -28,9 +28,8 @@ async function loadMenuEditor() {
 
     try {
         const res = await api.getMenu();
-        const menuItems = res.menu; // Adjust based on your backend response structure
+        const menuItems = res.menu;
 
-        // Flatten menu object if it's grouped by category
         let allItems = [];
         if (Array.isArray(menuItems)) {
             allItems = menuItems;

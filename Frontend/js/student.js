@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     document.getElementById('studentName').textContent = user.name;
-    
-    // Default view
+
     showSection('menu');
 });
 
@@ -16,7 +15,7 @@ function showSection(sectionId) {
     document.getElementById('menuSection').style.display = 'none';
     document.getElementById('ordersSection').style.display = 'none';
     
-    document.getElementById(`${sectionId}Section`).style.display = 'grid'; // or block
+    document.getElementById(`${sectionId}Section`).style.display = 'grid';
 
     if (sectionId === 'menu') loadMenu();
     if (sectionId === 'orders') loadHistory();
@@ -31,7 +30,6 @@ async function loadMenu() {
         const menu = res.menu; 
         
         let html = '';
-        // Handle grouped menu (Breakfast, Lunch, etc.)
         for (const [category, items] of Object.entries(menu)) {
             items.forEach(item => {
                 html += `
