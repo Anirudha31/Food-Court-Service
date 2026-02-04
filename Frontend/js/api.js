@@ -3,7 +3,6 @@ const API_BASE = window.location.hostname === 'localhost'
     : 'https://food-court-service-backend.onrender.com/api';
 
 const api = {
-    // Helper for requests
     async request(method, endpoint, data = null) {
         const token = localStorage.getItem('token');
         const config = {
@@ -18,11 +17,9 @@ const api = {
 
         try {
             const res = await axios(config);
-            // Returns the object sent by the backend (e.g., { user, token })
             return res.data; 
         } catch (err) {
             console.error("API Error:", err);
-            // Re-throw to be caught by login.js catch block
             throw err;
         }
     },
@@ -32,5 +29,10 @@ const api = {
     
     // Other methods
     getMenu: () => api.request('GET', '/menu/today'),
+    getAllMenuItems: () => api.request('GET', '/menu/manage/all'),
+
+    addMenuItem: (itemData) => api.request('POST', '/menu', itemData),
+    deleteMenuItem: (id) => api.request('DELETE', `/menu/${id}`),
+
     getMyOrders: () => api.request('GET', '/orders/my-orders')
 };

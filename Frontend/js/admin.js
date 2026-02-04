@@ -1,69 +1,96 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Check Auth
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user || user.role !== 'admin') {
         window.location.href = 'login.html';
         return;
     }
     document.getElementById('adminName').textContent = user.name;
-
-    // 2. Load Initial View
     loadView('stats');
 });
 
 function loadView(viewName) {
-    // Hide all views
-    document.getElementById('statsView').style.display = 'none';
-    document.getElementById('menuView').style.display = 'none';
-    
-    // Show selected
-    document.getElementById(`${viewName}View`).style.display = viewName === 'stats' ? 'grid' : 'block';
-
+    const views = ['statsView', 'menuView'];
+    views.forEach(v => {
+        const element = document.getElementById(v);
+        if (element) element.style.display = 'none';
+    });
+    const activeView = document.getElementById(`${viewName}View`);
+    if (activeView) {
+        activeView.style.display = viewName === 'stats' ? 'grid' : 'block';
+    }
+    const titleMap = {
+        'stats': 'Overview',
+        'menu': 'Manage Menu',
+        'users': 'Manage Users'
+    };
+    document.getElementById('viewTitle').textContent = titleMap[viewName] || 'Dashboard';
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    const clickedButton = document.querySelector(`button[onclick="loadView('${viewName}')"]`);
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
     if (viewName === 'menu') loadMenuEditor();
 }
 
+function openAddModal() { document.getElementById('addModal').style.display = 'block'; }
+function closeModal() { document.getElementById('addModal').style.display = 'none'; }
+document.getElementById('addMenuForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        dish_name: document.getElementById('dishName').value,
+        price: Number(document.getElementById('dishPrice').value),
+        available_quantity: Number(document.getElementById('dishQty').value),
+        category: document.getElementById('dishCategory').value
+    };
+    try {
+        await api.addMenuItem(data);
+        alert("Dish added successfully!");
+        closeModal();
+        loadMenuEditor();
+    } catch (err) {
+        alert("Failed to add item. Check console.");
+        console.error(err);
+    }
+});
 async function loadMenuEditor() {
     const list = document.getElementById('menuList');
-    list.innerHTML = '<p>Loading...</p>';
-
+    list.innerHTML = 'Loading...';
     try {
         const res = await api.getMenu();
-        const menuItems = res.menu;
-
-        let allItems = [];
-        if (Array.isArray(menuItems)) {
-            allItems = menuItems;
-        } else {
-            Object.values(menuItems).forEach(arr => allItems.push(...arr));
+        const grouped = res.menu;
+        let html = '';
+        for (const [category, items] of Object.entries(grouped)) {
+            html += `<h4 style="margin: 15px 0 10px; text-transform: capitalize; color: var(--primary);">${category}</h4>`;
+            items.forEach(item => {
+                html += `
+                <div class="card" style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; padding: 12px;">
+                    <div>
+                        <strong>${item.dish_name}</strong> - ₹${item.price}
+                        <br><small>Qty: ${item.available_quantity}</small>
+                    </div>
+                    <button class="btn btn-sm" style="background: var(--danger);" onclick="deleteItem('${item._id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>`;
+            });
         }
-
-        list.innerHTML = allItems.map(item => `
-            <div class="card" style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <strong>${item.dish_name}</strong> - ₹${item.price}
-                    <br><small>${item.category}</small>
-                </div>
-                <button class="btn btn-sm" style="background: #ef4444;" onclick="deleteItem('${item._id}')">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `).join('');
+        list.innerHTML = html || '<p>No items found.</p>';
     } catch (err) {
         list.innerHTML = '<p>Error loading menu.</p>';
     }
 }
-
 async function deleteItem(id) {
-    if(!confirm("Delete this item?")) return;
+    if (!confirm("Delete this dish?")) return;
     try {
         await api.deleteMenuItem(id);
-        loadMenuEditor(); // Refresh
+        loadMenuEditor();
     } catch (err) {
-        alert("Failed to delete");
+        alert("Delete failed.");
     }
 }
-
 function logout() {
     localStorage.clear();
-    window.location.href = '../html/login.html';
+    window.location.href = 'login.html';
 }

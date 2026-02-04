@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - FoodCourt</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -12,16 +13,16 @@
             <div class="brand"><i class="fas fa-user-shield"></i> Admin</div>
             <nav class="nav-links">
                 <button class="nav-link active" onclick="loadView('stats')">
-                    <i class="fas fa-chart-pie"></i> Overview
+                    <i class="fas fa-chart-pie"></i> <span>Overview</span>
                 </button>
                 <button class="nav-link" onclick="loadView('menu')">
-                    <i class="fas fa-utensils"></i> Manage Menu
+                    <i class="fas fa-utensils"></i> <span>Manage Menu</span>
                 </button>
                 <button class="nav-link" onclick="loadView('users')">
-                    <i class="fas fa-users"></i> Manage Users
+                    <i class="fas fa-users"></i> <span>Manage Users</span>
                 </button>
                 <button class="nav-link logout" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
                 </button>
             </nav>
         </aside>
@@ -31,7 +32,6 @@
                 <h2 id="viewTitle">Overview</h2>
                 <div class="user-info">
                     <span id="adminName">Admin User</span>
-                    <div class="avatar">A</div>
                 </div>
             </header>
 
@@ -43,15 +43,48 @@
 
             <div id="menuView" style="display:none;">
                 <div class="card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                    <div class="menu-header">
                         <h3>Menu Items</h3>
                         <button class="btn btn-sm" onclick="openAddModal()">Add Item +</button>
                     </div>
-                    <div id="menuList" class="list-group">
-                        </div>
+                    <div id="menuList" class="list-group"></div>
                 </div>
             </div>
         </main>
+    </div>
+
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Dish</h3>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="addMenuForm">
+                <div class="input-group">
+                    <label>Dish Name</label>
+                    <input type="text" id="dishName" required>
+                </div>
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Price (₹)</label>
+                        <input type="number" id="dishPrice" required min="0">
+                    </div>
+                    <div class="input-group">
+                        <label>Quantity</label>
+                        <input type="number" id="dishQty" required min="0">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Category</label>
+                    <select id="dishCategory">
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="snacks">Snacks</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-full">Save Item</button>
+            </form>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

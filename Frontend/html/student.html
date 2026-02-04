@@ -4,61 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodCourt - Dashboard</title>
+    <title>FoodCourt - Student Dashboard</title>
     <link rel="stylesheet" href="../css/student.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-
-<div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-<div class="dashboard">
-    <aside class="sidebar">
-        <div class="brand">FoodCourt</div>
-        <nav class="nav-links">
-            <button class="nav-link active" onclick="showSection('menu')">
-                <i class="fas fa-th-large"></i> Menu
-            </button>
-            <button class="nav-link" onclick="showSection('orders')">
-                <i class="fas fa-shopping-bag"></i> My Orders
-            </button>
-            <button class="nav-link" onclick="showSection('wallet')">
-                <i class="fas fa-wallet"></i> Wallet
-            </button>
-            <button class="nav-link logout" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </nav>
-    </aside>
-
-    <main class="content">
-        <header class="header">
-            <button class="mobile-toggle" onclick="toggleSidebar()">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-
-            <div class="user-actions">
-                <button class="cart-btn" onclick="viewCart()">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cartCount" class="badge">0</span>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="brand"><i class="fas fa-utensils"></i> FoodCourt</div>
+            <nav class="nav-links">
+                <button class="nav-link active" onclick="showSection('menu')">
+                    <i class="fas fa-th-large"></i> <span>Menu</span>
                 </button>
+                <button class="nav-link" onclick="showSection('orders')">
+                    <i class="fas fa-shopping-bag"></i> <span>My Orders</span>
+                </button>
+                <button class="nav-link" onclick="showSection('wallet')">
+                    <i class="fas fa-wallet"></i> <span>Wallet</span>
+                </button>
+                <button class="nav-link logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                </button>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header class="header">
+                <div class="header-left">
+                    <div class="greeting">
+                        <h2>Welcome, <span id="studentName">Student</span></h2>
+                        <p>What's on the menu today?</p>
+                    </div>
+                </div>
+
+                <div class="user-actions">
+                    <button class="cart-btn" onclick="viewCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cartCount" class="badge">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <div id="menuSection" class="food-grid">
             </div>
 
-            <div class="greeting">
-                <h2>Welcome, <span id="studentName">Student</span></h2>
-                <p>What would you like to eat today?</p>
+            <div id="ordersSection" style="display:none;">
+                <div class="card">
+                    <h3>Order History</h3>
+                    <div id="historyList" class="list-group"></div>
+                </div>
             </div>
-        </header>
+        </main>
+    </div>
 
-        <section id="menuSection" class="food-grid"></section>
-
-        <section id="ordersSection" style="display:none;">
-            <h3>Order History</h3>
-            <div id="historyList"></div>
-        </section>
-    </main>
-</div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/student.js"></script>

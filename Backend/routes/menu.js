@@ -10,7 +10,7 @@ router.get('/today', async (req, res) => {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -44,14 +44,14 @@ router.get('/date/:date', async (req, res) => {
   try {
     const { date } = req.params;
     const targetDate = new Date(date);
-    
+
     if (isNaN(targetDate.getTime())) {
       return res.status(400).json({ message: 'Invalid date format' });
     }
 
     const startOfDay = new Date(targetDate);
     startOfDay.setHours(0, 0, 0, 0);
-    
+
     const endOfDay = new Date(targetDate);
     endOfDay.setHours(23, 59, 59, 999);
 
@@ -213,18 +213,25 @@ router.get('/manage/all', authenticate, authorize('admin', 'staff'), async (req,
     const skip = (page - 1) * limit;
 
     let filter = {};
+    
+    // Only apply category filter if it's actually provided
     if (category) filter.category = category;
-    if (date) {
+
+    // Fixed Date Logic: Only filter by date if the user sends one
+    if (date && date !== 'undefined' && date !== '') {
       const targetDate = new Date(date);
-      const startOfDay = new Date(targetDate);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(targetDate);
-      endOfDay.setHours(23, 59, 59, 999);
-      filter.date = { $gte: startOfDay, $lte: endOfDay };
+      if (!isNaN(targetDate.getTime())) {
+        const startOfDay = new Date(targetDate);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(targetDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        filter.date = { $gte: startOfDay, $lte: endOfDay };
+      }
     }
 
+    // Fetch items with the flexible filter
     const menuItems = await Menu.find(filter)
-      .sort({ date: -1, category: 1, dish_name: 1 })
+      .sort({ createdAt: -1 }) // Show newest items first
       .skip(skip)
       .limit(parseInt(limit));
 
@@ -245,5 +252,4 @@ router.get('/manage/all', authenticate, authorize('admin', 'staff'), async (req,
     res.status(500).json({ message: 'Server error while fetching menu items' });
   }
 });
-
 module.exports = router;
