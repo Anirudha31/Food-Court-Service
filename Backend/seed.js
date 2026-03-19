@@ -1,10 +1,23 @@
-const mongoose = require('mongoose');
-const User = require('./models/User');
 require('dotenv').config();
+const dns = require('dns');
 
-mongoose.connect(process.env.MONGODB_URI)
+// Force Node to use Google's Public DNS (Fixes the ECONNREFUSED error)
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt'); 
+const User = require('./models/User'); // Ensure this path matches your folder structure
+
+// Safety check to ensure the environment variables are loaded
+if (!process.env.MONGODB_URI) {
+    console.error(' FATAL ERROR: MONGODB_URI is not defined in your .env file.');
+    process.exit(1);
+}
+
+// Connect to MongoDB using the IPv4 fallback for stability
+mongoose.connect(process.env.MONGODB_URI, { family: 4 })
     .then(() => {
-        console.log('MongoDB Connected. Seeding data...');
+        console.log('MongoDB Connected. Seeding user data...');
         seedData();
     })
     .catch(err => {
@@ -14,6 +27,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 const seedData = async () => {
     try {
+        // Clear out old data to prevent duplicate entries
         await User.deleteMany({});
         console.log(' Existing users cleared.');
 
@@ -74,15 +88,22 @@ const seedData = async () => {
             }
         ];
 
-        for (const data of usersData) {
-            const newUser = new User(data);
-            await newUser.save();
-        }
+        // Hash the passwords BEFORE inserting them into the database
+        const hashedUsersData = usersData.map(user => {
+            return {
+                ...user,
+                // Scramble the password using bcrypt with 10 salt rounds
+                password: bcrypt.hashSync(user.password, 10) 
+            };
+        });
+
+        // Insert the newly secured array
+        await User.insertMany(hashedUsersData);
+        console.log(' Users seeded successfully with encrypted passwords!');
         
-        
-        process.exit();
+        process.exit(0); // 0 means a clean, successful exit
     } catch (error) {
         console.error('\n Seeding Error:', error.message);
-        process.exit(1);
+        process.exit(1); // 1 means exit with an error
     }
 };

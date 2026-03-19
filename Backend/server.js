@@ -1,8 +1,17 @@
+const dns = require('dns');
+// Force Node to use Google's Public DNS
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const adminRoutes = require('./routes/admin');
 require('dotenv').config();
+
+
+
+
 
 const app = express();
 
@@ -12,7 +21,7 @@ app.use(cors());
 
 // 1. Serve Static Files from the 'Frontend' folder
 app.use(express.static(path.join(__dirname, '../Frontend')));
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Database Connection
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB Connected"))
@@ -22,6 +31,7 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/menu', require('./routes/menu'));
 app.use('/api/orders', require('./routes/orders'));
+app.use('/api/admin', adminRoutes);
 // Add other routes (users, staff) here as needed
 
 // 2. Default Route: Send users to login.html
