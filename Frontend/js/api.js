@@ -24,15 +24,20 @@ const api = {
         }
     },
 
-    // Auth Login
+    // --- Auth Login ---
     login: (credentials) => api.request('POST', '/auth/login', credentials),
     
-    // Other methods
+    // --- Menu Methods ---
     getMenu: () => api.request('GET', '/menu/today'),
     getAllMenuItems: () => api.request('GET', '/menu/manage/all'),
-
     addMenuItem: (itemData) => api.request('POST', '/menu', itemData),
     deleteMenuItem: (id) => api.request('DELETE', `/menu/${id}`),
 
-    getMyOrders: () => api.request('GET', '/orders/my-orders')
+    // --- Order Methods ---
+    getMyOrders: () => api.request('GET', '/orders/my-orders'),
+
+    // --- NEW: Admin User Management Methods ---
+    getUsers: () => api.request('GET', '/admin/users'),
+    addUser: (userData) => api.request('POST', '/admin/users', userData),
+    deleteUser: (id) => api.request('DELETE', `/admin/users/${id}`)
 };

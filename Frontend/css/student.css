@@ -1,229 +1,338 @@
+/* --- Root Variables & Themes --- */
 :root {
-    --primary: #0e3cb8;
-    --primary-light: #eff6ff;
-    --accent: #ff4757;
-    --bg-main: #f1f5f9;
-    --surface: #ffffff;
-    --text-dark: #0f172a;
-    --text-gray: #64748b;
-    --border: #e2e8f0;
-    --sidebar-width: 260px;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --primary: #0e3cb8;
+  --primary-light: #eff6ff;
+  --accent: #ff4757;
+  --bg-main: #f1f5f9;
+  --surface: #ffffff;
+  --text-dark: #0f172a;
+  --text-gray: #64748b;
+  --border: #e2e8f0;
+  --sidebar-width: 260px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-    background: var(--bg-main);
-    color: var(--text-dark);
-    overflow-x: hidden;
+  background: var(--bg-main);
+  color: var(--text-dark);
+  overflow-x: hidden;
 }
 
+/* --- Main Layout --- */
 .dashboard {
-    display: flex;
-    min-height: 100vh;
+  display: flex;
+  min-height: 100vh;
 }
 
-
+/* --- Sidebar Navigation --- */
 .sidebar {
-    width: var(--sidebar-width);
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100vh;
-    z-index: 1000;
-    transition: transform 0.3s ease;
+  width: var(--sidebar-width);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  z-index: 1000;
+  transition: transform 0.3s ease;
 }
 
 .brand {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--primary);
-    margin-bottom: 40px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 40px;
 }
 
 .nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .nav-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    color: var(--text-gray);
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    background: transparent;
-    border: none;
-    text-align: left;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: var(--text-gray);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
 }
 
 .nav-link:hover {
-    background: #f1f5f9;
-    color: var(--primary);
+  background: #f1f5f9;
+  color: var(--primary);
 }
 
 .nav-link.active {
-    background: var(--primary-light);
-    color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .nav-link.logout {
-    margin-top: auto;
-    color: var(--accent);
+  margin-top: auto;
+  color: var(--accent);
 }
 
-
+/* --- Main Content Area --- */
 .content {
-    flex: 1;
-    margin-left: var(--sidebar-width);
-    padding: 32px;
-    transition: 0.3s;
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 32px;
+  transition: 0.3s;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
 }
 
 .greeting h2 {
-    font-size: 1.6rem;
-    color: var(--primary);
-    font-weight: 700;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  color: var(--primary);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .greeting p {
-    color: var(--text-gray);
-    font-size: 0.95rem;
+  color: var(--text-gray);
+  font-size: 0.95rem;
 }
 
-
+/* --- Floating Cart Button & Badge --- */
 .cart-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    color: var(--primary);
-    position: relative;
-    cursor: pointer;
-    box-shadow: var(--shadow);
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(14, 60, 184, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.cart-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(14, 60, 184, 0.6);
 }
 
 .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: var(--accent);
-    color: white;
-    font-size: 0.75rem;
-    padding: 3px 7px;
-    border-radius: 50%;
-    font-weight: 700;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: var(--accent);
+  color: white;
+  font-size: 0.85rem;
+  padding: 5px 9px;
+  border-radius: 50%;
+  font-weight: 700;
+  border: 3px solid var(--surface);
 }
 
+/* --- Food Grid & Cards --- */
 .food-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
 .card {
-    background: var(--surface);
-    padding: 24px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    transition: 0.3s;
+  background: var(--surface);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: 0.3s;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .btn {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
+/* --- NEW: Image Styling --- */
+.food-img-container {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.food-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* Optional: Zooms the image slightly when hovering over the card */
+.card:hover .food-img {
+  transform: scale(1.05);
+}
+
+/* --- Mobile Responsiveness --- */
 @media (max-width: 700px) {
-    .sidebar {
-        width: 100%;
-        height: 70px;
-        flex-direction: row;
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        left: 0;
-        border-right: none;
-        border-top: 1px solid var(--border);
-        padding: 10px;
-    }
+  .sidebar {
+    width: 100%;
+    height: 70px;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    padding: 10px;
+  }
 
-    .brand,
-    .nav-link span {
-        display: none;
-    }
+  .brand,
+  .nav-link span {
+    display: none;
+  }
 
-    .nav-links {
-        flex-direction: row;
-        width: 100%;
-        justify-content: space-around;
-    }
+  .nav-links {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+  }
 
-    .nav-link {
-        flex-direction: column;
-        width: auto;
-        font-size: 1.2rem;
-    }
+  .nav-link {
+    flex-direction: column;
+    width: auto;
+    font-size: 1.2rem;
+  }
 
-    .greeting h2 {
-        margin-top: 20px;
-        font-size: 1.7rem;
-        color: var(--primary);
-        font-weight: 750;
-    }
+  .greeting h2 {
+    margin-top: 20px;
+    font-size: clamp(1rem, 5vw, 1.2rem);
+    color: var(--primary);
+    font-weight: 750;
+  }
 
-    .greeting p {
-        margin-top: 20px;
-        color: var(--text-gray);
-        font-size: 1rem;
-    }
+  .greeting p {
+    margin-top: 20px;
+    color: var(--text-gray);
+    font-size: 1rem;
+  }
 
+  .content {
+    margin-left: 0;
+    padding: 15px;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
 
-    .content {
-        margin-left: 0;
-        padding: 20px;
-        padding-bottom: 100px;
-    }
+  .cart-btn {
+    top: 20px;
+    right: 10px;
+    width: 55px;
+    height: 55px;
+    font-size: 1.3rem;
+  }
 
-    .mobile-toggle {
-        display: block;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-    }
+  .mobile-toggle {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  .header {
+    padding-right: 80px;
+  }
+
+  .food-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 100px;
+  }
+
+  .card {
+    padding: 12px;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius: 12px;
+  }
+
+  .food-img-container {
+    height: 100px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+  }
+
+  .card h3 {
+    font-size: 0.95rem !important;
+    margin: 8px 0 4px 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card p {
+    font-size: 0.75rem !important;
+    min-height: 32px !important;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card > div:last-child {
+    margin-top: 0.5rem !important;
+  }
+
+  .card > div:last-child span {
+    font-size: 1.05rem !important;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
 }

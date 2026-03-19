@@ -38,14 +38,27 @@ async function loadMenu() {
         const res = await api.getMenu();
         const menu = res.menu; 
         let html = '';
+        
         for (const [category, items] of Object.entries(menu)) {
             items.forEach(item => {
+                const defaultImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80';
+                const imgSrc = item.image_url || defaultImage;
+
                 html += `
                 <div class="card">
-                    <span style="font-size:0.75rem; color:var(--primary); font-weight:700; text-transform:uppercase;">${category}</span>
-                    <h3 style="margin: 5px 0;">${item.dish_name}</h3>
-                    <p style="font-size:0.9rem; color:var(--text-gray);">${item.description || 'Tasty & Fresh'}</p>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem;">
+                    <span style="font-size:0.75rem; color:var(--primary); font-weight:700; text-transform:uppercase; display:block; margin-bottom:10px;">
+                        ${category}
+                    </span>
+                    
+                    <div class="food-img-container">
+                        <img src="${imgSrc}" alt="${item.dish_name}" class="food-img">
+                    </div>
+
+                    <h3 style="margin: 15px 0 5px 0;">${item.dish_name}</h3>
+                    <p style="font-size:0.9rem; color:var(--text-gray); min-height: 40px;">
+                        ${item.description || 'Tasty & Fresh'}
+                    </p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
                         <span style="font-weight:800; font-size:1.3rem; color:var(--text-dark);">₹${item.price}</span>
                         <button class="btn" onclick="addToCart('${item._id}', '${item.dish_name}', ${item.price})">
                             Add +
@@ -57,6 +70,7 @@ async function loadMenu() {
         grid.innerHTML = html || '<p>No items available today.</p>';
     } catch (err) {
         grid.innerHTML = '<p>Error loading menu.</p>';
+        console.error("Menu Load Error:", err); // Helpful for debugging
     }
 }
 function addToCart(id, name, price) {

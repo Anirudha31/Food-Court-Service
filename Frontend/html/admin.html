@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - FoodCourt</title>
+    <title>FoodCourt - Admin Panel</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
     <div class="dashboard">
         <aside class="sidebar">
-            <div class="brand"><i class="fas fa-user-shield"></i> Admin</div>
+            <div class="brand"><i class="fas fa-user-shield"></i>  Admin  </div>
             <nav class="nav-links">
-                <button class="nav-link active" onclick="loadView('stats')">
-                    <i class="fas fa-chart-pie"></i> <span>Overview</span>
+                <button class="nav-link active" onclick="showSection('overview')">
+                    <i class="fas fa-chart-line"></i> <span>Overview</span>
                 </button>
-                <button class="nav-link" onclick="loadView('menu')">
-                    <i class="fas fa-utensils"></i> <span>Manage Menu</span>
+                <button class="nav-link" onclick="showSection('manage-users')">
+                    <i class="fas fa-users"></i> <span>Users</span>
                 </button>
-                <button class="nav-link" onclick="loadView('users')">
-                    <i class="fas fa-users"></i> <span>Manage Users</span>
+                <button class="nav-link" onclick="showSection('manage-menu')">
+                    <i class="fas fa-hamburger"></i> <span>Menu</span>
                 </button>
                 <button class="nav-link logout" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
@@ -29,61 +31,137 @@
 
         <main class="content">
             <header class="header">
-                <h2 id="viewTitle">Overview</h2>
-                <div class="user-info">
-                    <span id="adminName">Admin User</span>
+                <div class="header-left">
+                    <div class="greeting">
+                        <h2>Welcome, <span id="adminName">Admin</span></h2>
+                        <p id="currentDate">System Status: Online</p>
+                    </div>
                 </div>
             </header>
 
-            <div id="statsView" class="stats-row">
-                <div class="card"><h3>₹0</h3><p>Today's Sales</p></div>
-                <div class="card"><h3>0</h3><p>Total Orders</p></div>
-                <div class="card"><h3>0</h3><p>Active Users</p></div>
-            </div>
+            <section id="overviewSection">
+                <div class="stats-row">
+                    <div class="card">
+                        <i class="fas fa-shopping-bag" style="color:var(--primary)"></i>
+                        <h3>Total Orders</h3>
+                        <p id="totalOrders">0</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-rupee-sign" style="color:#10b981"></i>
+                        <h3>Revenue</h3>
+                        <p id="totalRevenue">₹0</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-user-check" style="color:#f59e0b"></i>
+                        <h3>Registered Users</h3>
+                        <p id="activeUsersCount">0</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Recent Activity</h3>
+                    <div id="recentOrdersList" class="list-group">
+                        <p style="color:var(--text-gray); margin-top:10px;">No recent transactions.</p>
+                    </div>
+                </div>
+            </section>
 
-            <div id="menuView" style="display:none;">
+            <section id="manageUsersSection" style="display:none;">
                 <div class="card">
                     <div class="menu-header">
-                        <h3>Menu Items</h3>
-                        <button class="btn btn-sm" onclick="openAddModal()">Add Item +</button>
+                        <h3>System Users</h3>
+                        <button class="btn" onclick="openModal('userModal')"><i class="fas fa-user-plus"></i> Add
+                            User</button>
                     </div>
-                    <div id="menuList" class="list-group"></div>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>College ID</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTableBody">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <section id="manageMenuSection" style="display:none;">
+                <div class="card">
+                    <div class="menu-header">
+                        <h3>Canteen Menu</h3>
+                        <button class="btn" onclick="openModal('menuModal')"><i class="fas fa-plus"></i> Add
+                            Dish</button>
+                    </div>
+                    <div id="adminMenuGrid" class="food-grid">
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
-    <div id="addModal" class="modal">
+    <div id="userModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Dish</h3>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
-            </div>
-            <form id="addMenuForm">
-                <div class="input-group">
-                    <label>Dish Name</label>
-                    <input type="text" id="dishName" required>
-                </div>
-                <div class="form-row">
-                    <div class="input-group">
-                        <label>Price (₹)</label>
-                        <input type="number" id="dishPrice" required min="0">
-                    </div>
-                    <div class="input-group">
-                        <label>Quantity</label>
-                        <input type="number" id="dishQty" required min="0">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>Category</label>
-                    <select id="dishCategory">
-                        <option value="breakfast">Breakfast</option>
-                        <option value="lunch">Lunch</option>
-                        <option value="snacks">Snacks</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-full">Save Item</button>
+            <h3>Register New User</h3>
+            <form id="addUserForm" onsubmit="handleUserSubmit(event)" autocomplete="off">
+                <input type="text" id="userName" placeholder="Full Name" autocomplete="off" required>
+
+                <input type="text" id="userCollegeId" placeholder="College ID (e.g., BWU/...)" autocomplete="off"
+                    required>
+
+                <input type="email" id="userEmail" placeholder="College Email" autocomplete="off" required>
+
+                <input type="password" id="userPass" placeholder="Set Password" autocomplete="new-password" required>
+
+                <label style="font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 5px;">Assign
+                    Role:</label>
+                <select id="userRole" required>
+                    <option value="student">Student</option>
+                    <option value="professor">Professor</option>
+                    <option value="staff">Staff Member</option>
+                    <option value="admin">Admin</option>
+                </select>
+
+                <button type="submit" class="btn btn-full">Create Account</button>
+                <button type="button" class="btn btn-full btn-danger" onclick="closeModals()">Cancel</button>
             </form>
+        </div>
+    </div>
+
+    <div id="menuModal" class="modal">
+        <div class="modal-content">
+            <h3>Add Menu Item</h3>
+            <form id="addMenuForm" onsubmit="handleMenuSubmit(event)">
+                <input type="text" id="dishName" placeholder="Dish Name" required>
+                <input type="number" id="dishPrice" placeholder="Price (₹)" required>
+                <select id="dishCategory" required>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="snacks">Snacks</option>
+                    <option value="dinner">Dinner</option>
+                </select>
+                <input type="text" id="dishImg" placeholder="Image URL (Unsplash link)">
+                <button type="submit" class="btn btn-full">Add to Menu</button>
+                <button type="button" class="btn btn-full btn-danger" onclick="closeModals()">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div id="confirmModal" class="modal" style="z-index: 3000;">
+        <div class="modal-content" style="text-align: center; max-width: 350px;">
+            <div style="font-size: 3rem; color: var(--accent); margin-bottom: 15px;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 id="confirmMessage" style="margin-bottom: 25px;">Are you sure?</h3>
+            <div style="display: flex; gap: 15px;">
+                <button id="confirmYesBtn" class="btn btn-danger" style="flex: 1;">Yes, Delete</button>
+                <button class="btn" style="flex: 1; background: var(--text-gray);"
+                    onclick="closeConfirmModal()">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -91,4 +169,5 @@
     <script src="../js/api.js"></script>
     <script src="../js/admin.js"></script>
 </body>
+
 </html>
