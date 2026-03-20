@@ -61,7 +61,7 @@ function onScanSuccess(decodedText, decodedResult) {
 
     } catch (err) {
         console.error("Scanner failed to parse text:", decodedText);
-        alert("Invalid QR Code Data! Please check the console.");
+        showToast("Invalid QR Code Data!", true);
         document.getElementById('reader').style.display = 'block';
         startScanner();
     }
@@ -92,7 +92,7 @@ async function confirmServe() {
             }
         );
 
-        alert("Order completed! Food has been served.");
+        showToast("Order completed! Food has been served.");
 
         // Reset UI for the next student
         document.getElementById('orderVerifyCard').style.display = 'none';
@@ -107,11 +107,32 @@ async function confirmServe() {
     } catch (err) {
         console.error("Confirm Serve Error details:", err.response || err);
         const errorMsg = err.response?.data?.message || "Server Error! Could not update order status.";
-        alert(errorMsg);
+        showToast(errorMsg, true);
         
         btn.innerHTML = '<i class="fas fa-bell"></i> Confirm Food Served';
         btn.disabled = false;
     }
+}
+// --- TOAST NOTIFICATION SYSTEM ---
+function showToast(message, isError = false) {
+    const toast = document.getElementById("toast");
+    
+    // Add an icon based on success or error
+    const icon = isError ? '<i class="fas fa-exclamation-circle"></i>' : '<i class="fas fa-check-circle"></i>';
+    toast.innerHTML = `${icon} ${message}`;
+
+    if (isError) {
+        toast.classList.add("error");
+    } else {
+        toast.classList.remove("error");
+    }
+
+    toast.classList.add("show");
+
+    // Automatically hide it after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
 }
 
 function logout() {
