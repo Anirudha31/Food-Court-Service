@@ -18,36 +18,29 @@ router.post('/', authenticate, [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // Extract everything safely, including the order_id we send from the frontend
     const { items, notes, order_id } = req.body;
     const userId = req.user._id;
-
-    // Get today's menu
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
 
     // Validate items and calculate totals
     let totalAmount = 0;
     const validatedItems = [];
 
     for (const item of items) {
+      // 🔥 UPDATED: Find dish purely by name and availability (No dates!)
       const menuItem = await Menu.findOne({
         dish_name: item.dish_name,
-        date: { $gte: today, $lt: tomorrow },
         is_available: true
       });
 
       if (!menuItem) {
         return res.status(400).json({
-          message: `Dish "${item.dish_name}" is not available today`
+          message: `Dish "${item.dish_name}" is currently not available.`
         });
       }
 
       if (menuItem.available_quantity < item.quantity) {
         return res.status(400).json({
-          message: `Insufficient quantity for "${item.dish_name}". Available: ${menuItem.available_quantity}`
+          message: `Insufficient quantity for "${item.dish_name}". Only ${menuItem.available_quantity} left.`
         });
       }
 
@@ -61,26 +54,24 @@ router.post('/', authenticate, [
       totalAmount += subtotal;
     }
 
-    // Generate an ID if the frontend forgot it somehow
     const finalOrderId = order_id || ("ORD" + Date.now() + Math.floor(Math.random() * 1000));
 
-    // Create order with explicit defaults to satisfy strict MongoDB schemas
     const order = new Order({
       order_id: finalOrderId,
       user_id: userId,
       items: validatedItems,
       total_amount: totalAmount,
       notes: notes || "",
-      order_status: 'pending',     // Explicitly set
-      payment_status: 'pending'    // Explicitly set
+      order_status: 'pending',     
+      payment_status: 'pending'    
     });
 
-    await order.save(); // <--- If it crashes here, our catch block will catch it!
+    await order.save(); 
 
-    // Update menu quantities
+    // 🔥 UPDATED: Deduct stock purely by dish name (No dates!)
     for (const item of validatedItems) {
       await Menu.updateOne(
-        { dish_name: item.dish_name, date: { $gte: today, $lt: tomorrow } },
+        { dish_name: item.dish_name },
         { $inc: { available_quantity: -item.quantity } }
       );
     }
@@ -90,10 +81,7 @@ router.post('/', authenticate, [
       order
     });
   } catch (error) {
-    // THIS IS THE MAGIC LINE: It will print the exact reason to your VS Code terminal!
     console.error('🔥 EXACT CRASH REASON:', error.stack);
-
-    // We also send the specific error back to the frontend so it shows in the alert box
     res.status(500).json({
       message: 'Database error while creating order',
       details: error.message
@@ -180,7 +168,6 @@ router.patch('/:id/status', authenticate, authorize('staff', 'admin'), [
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Validate status transitions
     const validTransitions = {
       'pending': ['confirmed', 'cancelled'],
       'confirmed': ['preparing', 'cancelled'],
@@ -278,15 +265,10 @@ router.patch('/:id/cancel', authenticate, async (req, res) => {
       });
     }
 
-    // Restore menu quantities
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
+    // 🔥 UPDATED: Restore menu quantities by name (No dates!)
     for (const item of order.items) {
       await Menu.updateOne(
-        { dish_name: item.dish_name, date: { $gte: today, $lt: tomorrow } },
+        { dish_name: item.dish_name },
         { $inc: { available_quantity: item.quantity } }
       );
     }

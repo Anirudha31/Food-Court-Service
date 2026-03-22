@@ -123,6 +123,39 @@ async function processPayment() {
                     payBtn.disabled = false;
                 }
             },
+
+            // THIS RUNS IF THEY CLICK THE 'X' TO CLOSE THE POPUP
+            modal: {
+                ondismiss: async function () {
+                    // 1. Stop the spinning button instantly
+                    payBtn.innerHTML = 'Confirm & Pay';
+                    payBtn.disabled = false;
+
+                    // 2. Tell the backend to cancel the order and put the food back!
+                    try {
+                        // Grab the MongoDB _id from the order we created in Step 1
+                        const mongoOrderId = orderRes.order?._id || orderRes.data?.order?._id;
+
+                        if (mongoOrderId) {
+                            // Smart URL detector for the direct axios call
+                            const backendURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                                ? 'http://localhost:5000'
+                                : 'https://food-court-service-backend.onrender.com';
+
+                            const token = sessionStorage.getItem('token');
+
+                            // Hit the cancel route we updated earlier!
+                            await axios.patch(`${backendURL}/api/orders/${mongoOrderId}/cancel`, {}, {
+                                headers: { Authorization: `Bearer ${token}` }
+                            });
+
+                            console.log("Order cancelled. Stock returned to menu.");
+                        }
+                    } catch (cancelErr) {
+                        console.error("Failed to release stock:", cancelErr);
+                    }
+                }
+            },
             theme: { color: "#10b981" }
         };
 
