@@ -5,36 +5,34 @@ const { authenticate, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
+//Global Canteen Status (Defaults to Open when server starts)
+let isCanteenOpen = true;
+
+//Check if Canteen is Open
+router.get('/status', (req, res) => {
+  res.json({ isOpen: isCanteenOpen });
+});
+
+//Toggle Canteen Status (Admin)
+router.post('/status/toggle', authenticate, authorize('admin'), (req, res) => {
+  isCanteenOpen = !isCanteenOpen;
+  res.json({ isOpen: isCanteenOpen, message: `Canteen is now ${isCanteenOpen ? 'OPEN' : 'CLOSED'}` });
+});
+
 // Get today's menu (public)
 router.get('/today', async (req, res) => {
   try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Just fetch everything that is marked as available!
+    const menu = await Menu.find({ is_available: true }).sort({ category: 1, dish_name: 1 });
 
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const menu = await Menu.find({
-      date: { $gte: today, $lt: tomorrow },
-      is_available: true
-    }).sort({ category: 1, dish_name: 1 });
-
-    // Group by category
     const groupedMenu = menu.reduce((acc, item) => {
-      if (!acc[item.category]) {
-        acc[item.category] = [];
-      }
+      if (!acc[item.category]) acc[item.category] = [];
       acc[item.category].push(item);
       return acc;
     }, {});
 
-    res.json({
-      message: 'Today\'s menu retrieved successfully',
-      menu: groupedMenu,
-      date: today
-    });
+    res.json({ message: 'Menu retrieved successfully', menu: groupedMenu });
   } catch (error) {
-    console.error('Get today\'s menu error:', error);
     res.status(500).json({ message: 'Server error while fetching menu' });
   }
 });
@@ -82,47 +80,25 @@ router.get('/date/:date', async (req, res) => {
 // Add menu item (admin/staff only)
 router.post('/', authenticate, authorize('admin', 'staff'), [
   body('dish_name').notEmpty().withMessage('Dish name is required'),
-  body('price').isNumeric().withMessage('Price must be a number').isFloat({ min: 0 }).withMessage('Price must be positive'),
-  body('available_quantity').isInt({ min: 0 }).withMessage('Quantity must be a non-negative integer'),
-  body('category').isIn(['breakfast', 'lunch', 'snacks', 'dinner', 'beverages']).withMessage('Invalid category')
+  body('price').isNumeric(),
+  body('available_quantity').isInt({ min: 0 }),
+  body('category').isIn(['breakfast', 'lunch', 'snacks', 'dinner', 'beverages'])
 ], async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    const { dish_name, price, available_quantity, category, description, image_url } = req.body;
 
-    const { dish_name, price, available_quantity, category, description, image_url, date } = req.body;
-
-    // Check if dish already exists for the given date
-    const existingDish = await Menu.findOne({
-      dish_name,
-      date: date ? new Date(date) : new Date()
-    });
-
+    // Just check if the dish name exists AT ALL
+    const existingDish = await Menu.findOne({ dish_name });
     if (existingDish) {
-      return res.status(400).json({ message: 'Dish already exists for this date' });
+      return res.status(400).json({ message: 'Dish already exists in the permanent menu' });
     }
 
-    const menuItem = new Menu({
-      dish_name,
-      price,
-      available_quantity,
-      category,
-      description,
-      image_url,
-      date: date ? new Date(date) : new Date()
-    });
-
+    const menuItem = new Menu({ dish_name, price, available_quantity, category, description, image_url });
     await menuItem.save();
 
-    res.status(201).json({
-      message: 'Menu item added successfully',
-      menuItem
-    });
+    res.status(201).json({ message: 'Menu item added successfully', menuItem });
   } catch (error) {
-    console.error('Add menu item error:', error);
-    res.status(500).json({ message: 'Server error while adding menu item' });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -213,7 +189,7 @@ router.get('/manage/all', authenticate, authorize('admin', 'staff'), async (req,
     const skip = (page - 1) * limit;
 
     let filter = {};
-    
+
     // Only apply category filter if it's actually provided
     if (category) filter.category = category;
 

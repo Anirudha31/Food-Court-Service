@@ -86,14 +86,17 @@ function showSection(sectionId) {
             link.classList.add('active');
         }
     });
+    // Load Data based on active tab
     if (sectionId === 'overview') {
         loadOverview();
         loadUsers();
     }
-
-    // Load Data
     if (sectionId === 'manage-users') loadUsers();
-    if (sectionId === 'manage-menu') loadAdminMenu();
+
+    if (sectionId === 'manage-menu') {
+        loadAdminMenu();
+        loadCanteenStatus();
+    }
 }
 
 // ==========================================
@@ -101,9 +104,9 @@ function showSection(sectionId) {
 // ==========================================
 async function loadOverview(selectedDate = null) {
     try {
-        const token = sessionStorage.getItem('token'); 
+        const token = sessionStorage.getItem('token');
         const backendURL = 'https://food-court-service-backend.onrender.com';
-        const dateToFetch = selectedDate || new Date().toISOString().split('T')[0]; 
+        const dateToFetch = selectedDate || new Date().toISOString().split('T')[0];
         const dateInput = document.getElementById('overviewDate');
         if (dateInput) dateInput.value = dateToFetch;
         const summaryRes = await axios.get(`${backendURL}/api/staff/summary?date=${dateToFetch}`, {
@@ -403,3 +406,107 @@ window.onclick = function (event) {
         closeStockModal();
     }
 };
+
+// ==========================================
+// SEARCH & CANTEEN TOGGLE LOGIC
+// ==========================================
+
+// 1. Live Instant Search!
+function filterMenu() {
+    const query = document.getElementById('menuSearch').value.toLowerCase();
+    const cards = document.querySelectorAll('#adminMenuGrid .card'); // Grabs all generated food cards
+
+    cards.forEach(card => {
+        const dishName = card.querySelector('h4').textContent.toLowerCase();
+        // If the dish name matches the search, show it. Otherwise, hide it!
+        card.style.display = dishName.includes(query) ? 'block' : 'none';
+    });
+}
+
+// 2. Load the current ON/OFF status when you open the Menu tab
+async function loadCanteenStatus() {
+    try {
+        const backendURL = 'https://food-court-service-backend.onrender.com';
+        const res = await axios.get(`${backendURL}/api/menu/status`);
+        updateToggleButton(res.data.isOpen);
+    } catch (err) { console.error("Status check failed"); }
+}
+
+// 3. Flip the switch!
+async function toggleCanteenStatus() {
+    try {
+        const token = sessionStorage.getItem('token');
+        const backendURL = 'https://food-court-service-backend.onrender.com';
+        const res = await axios.post(`${backendURL}/api/menu/status/toggle`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        updateToggleButton(res.data.isOpen);
+        showToast(res.data.message, res.data.isOpen ? "success" : "error");
+    } catch (err) { showToast("Failed to change status", "error"); }
+}
+
+// Helper to change the button color safely
+function updateToggleButton(isOpen) {
+    const btn = document.getElementById('canteenToggleBtn');
+    if (!btn) return;
+    btn.innerHTML = isOpen ? '<i class="fas fa-store"></i> Canteen OPEN' : '<i class="fas fa-store-slash"></i> Canteen CLOSED';
+    btn.style.background = isOpen ? '#10b981' : '#ef4444'; // Green if open, Red if closed
+}
+
+// Smart URL detector!
+function getBackendURL() {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return 'http://localhost:5000'; // Uses your local backend when testing
+    }
+    return 'https://food-court-service-backend.onrender.com'; // Uses Render when live
+}
+
+// 1. Live Instant Search!
+function filterMenu() {
+    const query = document.getElementById('menuSearch').value.toLowerCase();
+    const cards = document.querySelectorAll('#adminMenuGrid .card');
+    
+    cards.forEach(card => {
+        const dishName = card.querySelector('h4').textContent.toLowerCase();
+        card.style.display = dishName.includes(query) ? 'block' : 'none';
+    });
+}
+
+// 2. Load the current ON/OFF status
+async function loadCanteenStatus() {
+    try {
+        const backendURL = getBackendURL();
+        const res = await axios.get(`${backendURL}/api/menu/status`);
+        updateToggleButton(res.data.isOpen);
+    } catch (err) { 
+        console.error("Status check failed:", err.response || err); 
+    }
+}
+
+// 3. Flip the switch!
+async function toggleCanteenStatus() {
+    try {
+        const token = sessionStorage.getItem('token');
+        const backendURL = getBackendURL();
+        
+        const res = await axios.post(`${backendURL}/api/menu/status/toggle`, {}, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        updateToggleButton(res.data.isOpen);
+        showToast(res.data.message, res.data.isOpen ? "success" : "error");
+    } catch (err) { 
+        // We log the EXACT error to the console now so we aren't guessing!
+        console.error("Toggle Error details:", err.response || err);
+        const errorMsg = err.response?.data?.message || "Failed to change status";
+        showToast(errorMsg, "error"); 
+    }
+}
+
+// Helper to change the button color safely
+function updateToggleButton(isOpen) {
+    const btn = document.getElementById('canteenToggleBtn');
+    if (!btn) return;
+    btn.innerHTML = isOpen ? '<i class="fas fa-store"></i> Canteen OPEN' : '<i class="fas fa-store-slash"></i> Canteen CLOSED';
+    btn.style.background = isOpen ? '#10b981' : '#ef4444'; 
+}

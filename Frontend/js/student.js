@@ -8,6 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('studentName').textContent = user.name;
     showSection('menu');
 });
+//Smart URL detector!
+function getBackendURL() {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return 'http://localhost:5000';
+    }
+    return 'https://food-court-service-backend.onrender.com';
+}
+
 function showSection(sectionId) {
     const sections = ['menuSection', 'ordersSection', 'walletSection'];
     sections.forEach(id => {
@@ -34,24 +42,42 @@ function showSection(sectionId) {
 async function loadMenu() {
     const grid = document.getElementById('menuSection');
     grid.innerHTML = '<p>Loading yummy food...</p>';
+    
     try {
+        //  Check if the canteen is OPEN (Strictly Manual Admin Switch Now)
+        const backendURL = getBackendURL(); 
+        const statusRes = await axios.get(`${backendURL}/api/menu/status`);
+        const effectivelyOpen = statusRes.data.isOpen; // No more clock math!
+
+        //  Create the warning banner if closed
+        let closedBanner = '';
+        if (!effectivelyOpen) {
+            closedBanner = `<div style="grid-column: 1/-1; background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 20px;"><i class="fas fa-store-slash"></i> The Canteen is currently closed.</div>`;
+        }
+
         const res = await api.getMenu();
         const menu = res.menu;
-        let html = '';
+        let html = closedBanner; // Put the banner at the top of the menu
 
         for (const [category, items] of Object.entries(menu)) {
             items.forEach(item => {
+                // Your custom image
                 const defaultImage = 'https://imgs.search.brave.com/eJrOBBqXjPdhO8ejCg9Vz4Tkubh4-rLONNGdACLq9vQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wbHVz/LnVuc3BsYXNoLmNv/bS9wcmVtaXVtX3Zl/Y3Rvci0xNzEzMzY0/MzkzMDg1LTBmZGRh/MTNlYzdjZD9mbT1q/cGcmcT02MCZ3PTMw/MDAmaXhsaWI9cmIt/NC4xLjA';
                 const imgSrc = item.image_url || defaultImage;
 
                 const stockQty = item.available_quantity || 0;
-                const stockDisplay = stockQty > 0
-                    ? `<span style="color: #10b981; font-size: 0.8rem; font-weight: 700;"><i class="fas fa-box"></i> ${stockQty} Available</span>`
-                    : `<span style="color: #ef4444; font-size: 0.8rem; font-weight: 700;"><i class="fas fa-times-circle"></i> Sold Out</span>`;
+                
+                // Show Lock icon if closed, otherwise show Stock Status
+                const stockDisplay = !effectivelyOpen
+                    ? `<span style="color: #ef4444; font-size: 0.8rem; font-weight: 700;"><i class="fas fa-lock"></i> Closed</span>`
+                    : (stockQty > 0
+                        ? `<span style="color: #10b981; font-size: 0.8rem; font-weight: 700;"><i class="fas fa-box"></i> ${stockQty} Available</span>`
+                        : `<span style="color: #ef4444; font-size: 0.8rem; font-weight: 700;"><i class="fas fa-times-circle"></i> Sold Out</span>`);
 
-                const buttonHtml = stockQty > 0
+                // Disable Button if Closed OR Sold Out
+                const buttonHtml = (stockQty > 0 && effectivelyOpen)
                     ? `<button class="btn" onclick="addToCart('${item._id}', '${item.dish_name}', ${item.price}, ${stockQty})">Add +</button>`
-                    : `<button class="btn" style="background: var(--border); color: var(--text-gray); cursor: not-allowed;" disabled>Empty</button>`;
+                    : `<button class="btn" style="background: var(--border); color: var(--text-gray); cursor: not-allowed;" disabled>${!effectivelyOpen ? 'Closed' : 'Empty'}</button>`;
 
                 html += `
                 <div class="card">
@@ -59,7 +85,8 @@ async function loadMenu() {
                         <span style="font-size:0.75rem; color:var(--primary); font-weight:700; text-transform:uppercase;">
                             ${category}
                         </span>
-                        ${stockDisplay} </div>
+                        ${stockDisplay} 
+                    </div>
                     
                     <div class="food-img-container">
                         <img src="${imgSrc}" alt="${item.dish_name}" class="food-img">
@@ -72,14 +99,15 @@ async function loadMenu() {
                     
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
                         <span style="font-weight:800; font-size:1.3rem; color:var(--text-dark);">₹${item.price}</span>
-                        ${buttonHtml} </div>
+                        ${buttonHtml} 
+                    </div>
                 </div>`;
             });
         }
         grid.innerHTML = html || '<p>No items available today.</p>';
     } catch (err) {
         grid.innerHTML = '<p>Error loading menu.</p>';
-        console.error("Menu Load Error:", err); // Helpful for debugging
+        console.error("Menu Load Error:", err); 
     }
 }
 function addToCart(id, name, price, maxStock) {

@@ -334,19 +334,43 @@ body {
     padding: 15px;
     width: 100%;
     margin-bottom: 10px;
-    .card p {
-      font-size: 1.4rem;
-    }
-    .card h3 {
-      font-size: 0.8rem;
-    }
-    .modal-content {
-      width: 95%;
-      margin: 20px auto;
-      padding: 20px;
-    }
+  }
+  .card p {
+    font-size: 1.4rem;
+  }
+  .card h3 {
+    font-size: 0.8rem;
+  }
+  .modal-content {
+    width: 95%;
+    margin: 20px auto;
+    padding: 20px;
+  }
+  .menu-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 15px;
+  }
+
+  .menu-header > div {
+    max-width: 100% !important;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .menu-header > div:nth-child(2) {
+    flex-direction: column !important; 
+    align-items: stretch !important;
+    gap: 10px;
+  }
+
+  .menu-header > div:nth-child(2) input,
+  .menu-header > div:nth-child(2) button {
+    width: 100% !important;
+    flex: none !important;
   }
 }
+
 /* --- TOAST NOTIFICATIONS --- */
 .toast-container {
   position: fixed;

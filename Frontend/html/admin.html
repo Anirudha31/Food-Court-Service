@@ -105,13 +105,25 @@
 
             <section id="manageMenuSection" style="display:none;">
                 <div class="card">
-                    <div class="menu-header">
-                        <h3>Canteen Menu</h3>
-                        <button class="btn" onclick="openModal('menuModal')"><i class="fas fa-plus"></i> Add
-                            Dish</button>
+                    <div class="menu-header"
+                        style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <h3 style="margin: 0;">Canteen Menu</h3>
+                            <button id="canteenToggleBtn" class="btn btn-sm" style="background: #10b981;"
+                                onclick="toggleCanteenStatus()">
+                                <i class="fas fa-store"></i> Open
+                            </button>
+                        </div>
+                        <div style="display: flex; gap: 10px; flex: 1; max-width: 400px;">
+                            <input type="text" id="menuSearch" placeholder="🔍 Search dishes..."
+                                style="flex: 1; padding: 8px 15px; border-radius: 8px; border: 1px solid var(--border);"
+                                onkeyup="filterMenu()">
+                            <button class="btn" style="white-space: nowrap;" onclick="openModal('menuModal')"><i
+                                    class="fas fa-plus"></i> Add Dish</button>
+                        </div>
                     </div>
-                    <div id="adminMenuGrid" class="food-grid">
-                    </div>
+
+                    <div id="adminMenuGrid" class="food-grid"></div>
                 </div>
             </section>
         </main>
