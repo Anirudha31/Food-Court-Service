@@ -7,6 +7,7 @@ const { body, validationResult } = require('express-validator');
 const Payment = require('../models/Payment');
 const Order = require('../models/Order');
 const { authenticate, authorize } = require('../middleware/auth');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -333,6 +334,74 @@ router.get('/manage/all', authenticate, authorize('admin', 'staff'), async (req,
     console.error('Get all payments error:', error);
     res.status(500).json({ message: 'Server error while fetching payments' });
   }
+});
+
+// ==========================================
+// CREATE WALLET RECHARGE ORDER
+// ==========================================
+router.post('/recharge/create', authenticate, async (req, res) => {
+    try {
+        const { amount } = req.body;
+        
+        // 1. Shorten the receipt to stay well under Razorpay's 40-character limit!
+        const shortId = req.user._id.toString().substring(18); // Just grab the last 6 chars of user ID
+        const safeReceipt = `rcg_${shortId}_${Date.now()}`; 
+        
+        const options = {
+            amount: amount * 100, // Convert to paise
+            currency: "INR",
+            receipt: safeReceipt
+        };
+        
+        const razorpayOrder = await razorpay.orders.create(options);
+        
+        res.json({ 
+            razorpay_order: razorpayOrder, 
+            key_id: process.env.RAZORPAY_KEY_ID 
+        });
+    } catch (error) {
+        // 2. Print the exact reason to your backend terminal
+        console.error('EXACT RECHARGE ERROR:', error);
+        
+        // 3. Send the exact reason to the frontend alert box!
+        res.status(500).json({ 
+            message: error.error ? error.error.description : error.message 
+        });
+    }
+});
+
+// ==========================================
+// VERIFY RECHARGE & ADD FUNDS
+// ==========================================
+router.post('/recharge/verify', authenticate, async (req, res) => {
+    try {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, amount } = req.body;
+
+        // Verify the payment is legit
+        const generated_signature = crypto
+            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+            .digest('hex');
+
+        if (generated_signature !== razorpay_signature) {
+            return res.status(400).json({ message: 'Invalid payment signature' });
+        }
+
+        //Surgically inject the money using $inc (Bypasses the buggy User hook!)
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            { $inc: { wallet_balance: Number(amount) } },
+            { new: true } // This tells Mongo to return the updated user to us
+        );
+
+        res.json({ 
+            message: 'Wallet recharged successfully!', 
+            new_balance: updatedUser.wallet_balance 
+        });
+    } catch (error) {
+        console.error('Recharge Verify Error:', error);
+        res.status(500).json({ message: 'Server error while verifying recharge' });
+    }
 });
 
 module.exports = router;

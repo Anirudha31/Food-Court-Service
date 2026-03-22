@@ -1,4 +1,5 @@
 @import url('student.css');
+
 .payment-container {
     display: flex;
     align-items: center;
@@ -7,6 +8,7 @@
     padding: 20px;
     background: var(--bg-main);
 }
+
 .payment-card {
     background: var(--surface);
     width: 100%;
@@ -17,16 +19,19 @@
     border: 1px solid var(--border);
     text-align: center;
 }
+
 .payment-icon {
     font-size: 3.5rem;
     color: var(--primary);
     margin-bottom: 20px;
 }
+
 .payment-card h2 {
     color: var(--text-dark);
     margin-bottom: 10px;
     font-weight: 800;
 }
+
 .order-summary {
     background: var(--primary-light);
     border-radius: 12px;
@@ -34,6 +39,7 @@
     margin: 25px 0;
     text-align: left;
 }
+
 .order-summary h4 {
     color: var(--primary);
     border-bottom: 1px solid rgba(14, 60, 184, 0.1);
@@ -43,6 +49,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
 .summary-item {
     display: flex;
     justify-content: space-between;
@@ -50,6 +57,7 @@
     font-size: 0.95rem;
     color: var(--text-dark);
 }
+
 .total-section {
     display: flex;
     justify-content: space-between;
@@ -58,20 +66,64 @@
     padding-top: 15px;
     border-top: 2px dashed var(--border);
 }
+
 .total-section h3 {
     font-size: 1.5rem;
     color: var(--text-dark);
 }
-.total-amount {
-    color: var(--primary);
-    font-weight: 800;
-}
-.btn-pay {
+
+/* --- 🔥 NEW: BALANCED PAYMENT BUTTONS --- */
+.payment-options {
+    display: flex;
+    gap: 12px;
+    margin: 25px 0;
     width: 100%;
-    padding: 16px;
-    font-size: 1.1rem;
-    margin-top: 10px;
 }
+
+.payment-options .btn {
+    flex: 1; /* Forces both buttons to be exactly 50% width */
+    height: 52px; /* Fixed height so they are identical */
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.1s, opacity 0.2s;
+    margin: 0 !important; /* Removes any accidental margins */
+    color: white;
+}
+
+.btn-wallet {
+    background-color: #10b981; /* Green */
+}
+
+.btn-online {
+    background-color: var(--primary); /* Blue */
+}
+
+.payment-options .btn:hover {
+    opacity: 0.9;
+}
+
+.payment-options .btn:active {
+    transform: scale(0.97);
+}
+
+/* --- CUSTOM MODAL STYLES --- */
+#customAlertModal {
+    backdrop-filter: blur(4px);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- LEGACY / BACKWARD COMPATIBILITY --- */
 .back-link {
     display: inline-block;
     margin-top: 20px;
@@ -81,11 +133,17 @@
     font-weight: 600;
     transition: 0.2s;
 }
+
 .back-link:hover {
     color: var(--primary);
 }
+
 @media (max-width: 480px) {
     .payment-card {
         padding: 25px;
+    }
+    
+    .payment-options {
+        gap: 8px; /* Slightly tighter on mobile */
     }
 }

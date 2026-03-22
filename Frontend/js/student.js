@@ -39,6 +39,7 @@ function showSection(sectionId) {
     
     if (sectionId === 'menu') loadMenu();
     if (sectionId === 'orders') loadHistory();
+    if (sectionId === 'wallet') loadWallet();
     
     const sidebar = document.querySelector('.sidebar');
     if (sidebar && sidebar.classList.contains('active')) {
@@ -334,4 +335,155 @@ function filterByCategory(categoryName, clickedButton) {
             card.style.display = 'none';
         }
     });
+}
+
+// ==========================================
+//  LOAD WALLET BALANCE
+// ==========================================
+async function loadWallet() {
+    try {
+        const token = sessionStorage.getItem('token');
+        const backendURL = getBackendURL();
+        
+        const res = await axios.get(`${backendURL}/api/orders/wallet/balance`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        document.getElementById('walletBalanceDisplay').innerText = `₹${res.data.balance}`;
+    } catch (err) {
+        console.error("Could not load wallet balance:", err);
+    }
+}
+
+// ==========================================
+// ONLINE WALLET RECHARGE
+// ==========================================
+function startWalletRecharge() {
+    // Open our beautiful custom prompt instead of the browser default
+    customPrompt("Add Funds to Wallet", "500", async (amountStr) => {
+        
+        if (!amountStr) return; // They clicked Cancel
+        
+        const amount = parseInt(amountStr);
+        if (isNaN(amount) || amount < 10) {
+            // Use our custom alert for the error!
+            return customAlert("Please enter a valid amount (minimum ₹10).", true);
+        }
+
+        try {
+            const token = sessionStorage.getItem('token');
+            const backendURL = getBackendURL();
+            const endpointBase = `${backendURL}/api/payment`;
+
+            const { data } = await axios.post(`${endpointBase}/recharge/create`, { amount }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            const options = {
+                key: data.key_id,
+                amount: data.razorpay_order.amount,
+                currency: "INR",
+                name: "FoodCourt Wallet",
+                description: "Adding Funds to Wallet",
+                order_id: data.razorpay_order.id,
+                
+                handler: async function (response) {
+                    try {
+                        showToast("Verifying payment...", "success");
+                        
+                        const verifyRes = await axios.post(`${endpointBase}/recharge/verify`, {
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            amount: amount
+                        }, {
+                            headers: { Authorization: `Bearer ${token}` }
+                        });
+
+                        // Update the balance and show our custom success alert!
+                        document.getElementById('walletBalanceDisplay').innerText = `₹${verifyRes.data.new_balance}`;
+                        customAlert(`₹${amount} has been successfully added to your wallet!`, false);
+
+                    } catch (verifyErr) {
+                        customAlert("Payment completed, but verification failed. Please contact admin.", true);
+                    }
+                },
+                theme: { color: "#10b981" }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                customAlert("Payment Failed: " + response.error.description, true);
+            });
+            rzp.open();
+
+        } catch (verifyErr) {
+                        console.error("🔥 VERIFICATION CRASH:", verifyErr);
+                        const realError = verifyErr.response?.data?.message || verifyErr.message || "Unknown Error";
+                        customAlert("Verification Failed: " + realError, true);
+                    }
+    });
+}
+
+// ==========================================
+// CUSTOM MODAL CONTROLLERS
+// ==========================================
+
+// 1. Custom Alert (Replaces window.alert)
+function customAlert(message, isError = false) {
+    const modal = document.getElementById('customAlertModal');
+    const icon = document.getElementById('customAlertIcon');
+    const title = document.getElementById('customAlertTitle');
+    
+    document.getElementById('customAlertMessage').innerText = message;
+    
+    if (isError) {
+        icon.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #ef4444;"></i>';
+        title.innerText = 'Oops!';
+    } else {
+        icon.innerHTML = '<i class="fas fa-check-circle" style="color: #10b981;"></i>';
+        title.innerText = 'Success!';
+    }
+    
+    modal.style.display = 'flex'; // Uses flex to center it perfectly
+}
+
+function closeCustomAlert() {
+    document.getElementById('customAlertModal').style.display = 'none';
+}
+
+// 2. Custom Prompt (Replaces window.prompt)
+let promptCallback = null;
+
+function customPrompt(title, defaultVal, callback) {
+    const modal = document.getElementById('customPromptModal');
+    document.getElementById('customPromptTitle').innerText = title;
+    
+    const input = document.getElementById('customPromptInput');
+    input.value = defaultVal;
+    
+    // Make the input border green when clicked
+    input.onfocus = () => input.style.borderColor = '#10b981';
+    input.onblur = () => input.style.borderColor = 'var(--border)';
+    
+    promptCallback = callback;
+    modal.style.display = 'flex';
+    input.focus();
+}
+
+function closeCustomPrompt() {
+    document.getElementById('customPromptModal').style.display = 'none';
+    promptCallback = null;
+}
+
+function submitCustomPrompt() {
+    const val = document.getElementById('customPromptInput').value;
+    
+    const callbackToRun = promptCallback; 
+
+    closeCustomPrompt(); 
+    
+    if (callbackToRun) {
+        callbackToRun(val); 
+    }
 }

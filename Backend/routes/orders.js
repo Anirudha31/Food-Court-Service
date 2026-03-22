@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const Order = require('../models/Order');
 const Menu = require('../models/Menu');
 const { authenticate, authorize } = require('../middleware/auth');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -18,30 +19,27 @@ router.post('/', authenticate, [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { items, notes, order_id } = req.body;
+    const { items, notes, order_id, payment_method } = req.body;
     const userId = req.user._id;
 
-    // Validate items and calculate totals
+    const user = await User.findById(userId);
+
     let totalAmount = 0;
     const validatedItems = [];
 
+    // 1. Validate Stock
     for (const item of items) {
-      // 🔥 UPDATED: Find dish purely by name and availability (No dates!)
       const menuItem = await Menu.findOne({
         dish_name: item.dish_name,
         is_available: true
       });
 
       if (!menuItem) {
-        return res.status(400).json({
-          message: `Dish "${item.dish_name}" is currently not available.`
-        });
+        return res.status(400).json({ message: `Dish "${item.dish_name}" is currently not available.` });
       }
 
       if (menuItem.available_quantity < item.quantity) {
-        return res.status(400).json({
-          message: `Insufficient quantity for "${item.dish_name}". Only ${menuItem.available_quantity} left.`
-        });
+        return res.status(400).json({ message: `Insufficient quantity for "${item.dish_name}". Only ${menuItem.available_quantity} left.` });
       }
 
       const subtotal = menuItem.price * item.quantity;
@@ -54,7 +52,15 @@ router.post('/', authenticate, [
       totalAmount += subtotal;
     }
 
+    // WALLET CHECK 1: Do they have enough money?
+    if (payment_method === 'wallet') {
+        if (user.wallet_balance < totalAmount) {
+            return res.status(400).json({ message: "Insufficient Wallet Balance! Please recharge or use Razorpay." });
+        }
+    }
+
     const finalOrderId = order_id || ("ORD" + Date.now() + Math.floor(Math.random() * 1000));
+    const initialPaymentStatus = payment_method === 'wallet' ? 'paid' : 'pending';
 
     const order = new Order({
       order_id: finalOrderId,
@@ -63,12 +69,31 @@ router.post('/', authenticate, [
       total_amount: totalAmount,
       notes: notes || "",
       order_status: 'pending',     
-      payment_status: 'pending'    
+      payment_status: initialPaymentStatus
     });
+
+    // Surgically deduct money (Bypassing User hooks) and make QR
+    if (payment_method === 'wallet') {
+        await User.findByIdAndUpdate(
+            userId,
+            { $inc: { wallet_balance: -totalAmount } }
+        );
+
+        const qrData = {
+            order_id: order.order_id,
+            payer_name: req.user.name,
+            college_id: req.user.college_id,
+            items: order.items.map(item => ({ dish: item.dish_name, qty: item.quantity })),
+            amount: order.total_amount,
+            payment_status: 'PAID (WALLET)',
+            payment_time: new Date()
+        };
+        order.qr_code_data = JSON.stringify(qrData);
+    }
 
     await order.save(); 
 
-    // 🔥 UPDATED: Deduct stock purely by dish name (No dates!)
+    // 2. Deduct Menu Stock
     for (const item of validatedItems) {
       await Menu.updateOne(
         { dish_name: item.dish_name },
@@ -77,11 +102,11 @@ router.post('/', authenticate, [
     }
 
     res.status(201).json({
-      message: 'Order created successfully',
+      message: payment_method === 'wallet' ? 'Order paid via Wallet successfully!' : 'Order created successfully',
       order
     });
   } catch (error) {
-    console.error('🔥 EXACT CRASH REASON:', error.stack);
+    console.error('EXACT CRASH REASON:', error.stack);
     res.status(500).json({
       message: 'Database error while creating order',
       details: error.message
@@ -283,6 +308,18 @@ router.patch('/:id/cancel', authenticate, async (req, res) => {
   } catch (error) {
     console.error('Cancel order error:', error);
     res.status(500).json({ message: 'Server error while cancelling order' });
+  }
+});
+
+// ==========================================
+// GET WALLET BALANCE
+// ==========================================
+router.get('/wallet/balance', authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    res.json({ balance: user.wallet_balance || 0 });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching wallet balance' });
   }
 });
 
