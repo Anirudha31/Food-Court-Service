@@ -207,28 +207,22 @@ router.get('/order/:order_id', async (req, res) => {
 
 // Get pending orders
 router.get('/orders/pending', async (req, res) => {
-  try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-    const orders = await Order.find({
-      order_date: { $gte: today, $lt: tomorrow },
-      payment_status: 'paid',
-      order_status: { $in: ['confirmed', 'preparing', 'ready'] }
-    })
-    .sort({ order_date: -1 })
-    .populate('user_id', 'name college_id email');
+        const orders = await Order.find({
+            order_date: { $gte: today },
+            payment_status: 'paid',
+            order_status: { $in: ['pending', 'confirmed', 'preparing', 'ready'] } 
+        })
+        .sort({ order_date: -1 })
+        .populate('user_id', 'name college_id');
 
-    res.json({
-      message: 'Pending orders retrieved successfully',
-      orders
-    });
-  } catch (error) {
-    console.error('Get pending orders error:', error);
-    res.status(500).json({ message: 'Server error while fetching pending orders' });
-  }
+        res.json({ orders });
+    } catch (error) {
+        res.status(500).json({ message: 'Error' });
+    }
 });
 
 // Get served orders for today
