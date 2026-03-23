@@ -121,22 +121,33 @@ async function loadServedOrders() {
     }
 }
 
-// --- 🔥 SCANNER LOGIC (FAST MOBILE CONFIG) ---
+// ---  SCANNER LOGIC (FAST MOBILE CONFIG) ---
 function startScanner() {
     const readerElement = document.getElementById('reader');
     if (!readerElement || html5QrcodeScanner) return;
 
-    // Removed heavy constraints. Reverted to standard, high-speed mobile config.
     html5QrcodeScanner = new Html5QrcodeScanner(
         "reader", 
-        { fps: 10, qrbox: { width: 250, height: 250 }, rememberLastUsedCamera: true },
-        false
+        { 
+            fps: 15,
+            qrbox: { width: 250, height: 250 }, 
+            rememberLastUsedCamera: true,
+
+            formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ],
+
+            videoConstraints: {
+                facingMode: "environment",
+                width: { ideal: 640 },
+                height: { ideal: 480 }
+            }
+        },
+        false // Turns off background logging to save processing power
     );
     
     html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 }
 
-// --- 🔥 SCANNER SUCCESS (LIVE DATABASE CHECK) ---
+// ---  SCANNER SUCCESS (LIVE DATABASE CHECK) ---
 async function onScanSuccess(decodedText) {
     // 1. Pause the camera immediately so it doesn't scan twice
     if (html5QrcodeScanner) html5QrcodeScanner.pause(true);
