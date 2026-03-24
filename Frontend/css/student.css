@@ -74,6 +74,7 @@ body {
   width: 100%;
 }
 
+/* Kept Nav Link Hover */
 .nav-link:hover {
   background: #f1f5f9;
   color: var(--primary);
@@ -142,6 +143,7 @@ body {
     box-shadow 0.3s ease;
 }
 
+/* Kept Cart Button Hover */
 .cart-btn:hover {
   transform: translateY(-5px) scale(1.05);
   box-shadow: 0 6px 20px rgba(14, 60, 184, 0.6);
@@ -236,6 +238,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
+/* Kept Filter Pill Hover */
 .filter-pill:hover {
   background: #f1f5f9;
   color: var(--primary);
@@ -262,11 +265,7 @@ body {
   border-radius: 16px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
+  /* Card hover animations completely removed from here */
 }
 
 .btn {
@@ -279,27 +278,82 @@ body {
   cursor: pointer;
 }
 
+/* ========================================= */
+/* PIXEL-PERFECT RESPONSIVE IMAGES           */
+/* ========================================= */
 .food-img-container {
   width: 100%;
-  height: 180px;
+  aspect-ratio: 4 / 3;
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 15px;
+  transform: translateZ(0);
 }
 
 .food-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  object-position: center;
 }
 
-.card:hover .food-img {
-  transform: scale(1.05);
+/* ========================================= */
+/* GLOBAL LOADING SCREEN                     */
+/* ========================================= */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.loader-overlay.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #e2e8f0;
+  border-top: 6px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#loaderText {
+  color: var(--text-dark);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
 }
 
 /* --- Mobile Responsiveness --- */
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .sidebar {
     width: 100%;
     height: 70px;
@@ -377,12 +431,6 @@ body {
     border-radius: 12px;
   }
 
-  .food-img-container {
-    height: 100px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-  }
-
   .card h3 {
     font-size: 0.95rem !important;
     margin: 8px 0 4px 0 !important;
@@ -414,6 +462,7 @@ body {
     font-size: 0.8rem;
     border-radius: 6px;
   }
+
   .student-search-header {
     flex-direction: column !important;
     align-items: stretch !important;

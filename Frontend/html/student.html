@@ -107,33 +107,46 @@
         </div>
     </div>
 
-    <div id="customAlertModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
-        <div style="background: white; padding: 30px; border-radius: 16px; text-align: center; max-width: 320px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+    <div id="customAlertModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+        <div
+            style="background: white; padding: 30px; border-radius: 16px; text-align: center; max-width: 320px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
             <div id="customAlertIcon" style="font-size: 3.5rem; margin-bottom: 15px;"></div>
             <h3 id="customAlertTitle" style="color: var(--text-dark); margin-bottom: 10px;">Alert</h3>
             <p id="customAlertMessage" style="color: var(--text-gray); margin-bottom: 25px; font-size: 0.95rem;"></p>
-            <button class="btn" style="width: 100%; border-radius: 10px; padding: 12px; font-size: 1rem;" onclick="closeCustomAlert()">Okay</button>
+            <button class="btn" style="width: 100%; border-radius: 10px; padding: 12px; font-size: 1rem;"
+                onclick="closeCustomAlert()">Okay</button>
         </div>
     </div>
 
-    <div id="customPromptModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
-        <div style="background: white; padding: 30px; border-radius: 16px; text-align: center; max-width: 320px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+    <div id="customPromptModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+        <div
+            style="background: white; padding: 30px; border-radius: 16px; text-align: center; max-width: 320px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
             <div style="font-size: 3rem; color: #10b981; margin-bottom: 15px;"><i class="fas fa-coins"></i></div>
             <h3 id="customPromptTitle" style="color: var(--text-dark); margin-bottom: 10px;">Enter Amount</h3>
-            
+
             <div style="position: relative; margin-bottom: 20px;">
-                <span style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: var(--text-gray); font-weight: bold;">₹</span>
-                <input type="number" id="customPromptInput" placeholder="500" style="width: 100%; padding: 12px 15px 12px 35px; border: 2px solid var(--border); border-radius: 10px; font-size: 1.2rem; font-weight: bold; outline: none; transition: 0.2s;">
+                <span
+                    style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: var(--text-gray); font-weight: bold;">₹</span>
+                <input type="number" id="customPromptInput" placeholder="500"
+                    style="width: 100%; padding: 12px 15px 12px 35px; border: 2px solid var(--border); border-radius: 10px; font-size: 1.2rem; font-weight: bold; outline: none; transition: 0.2s;">
             </div>
 
             <div style="display: flex; gap: 10px;">
-                <button class="btn" style="flex: 1; background: #e2e8f0; color: var(--text-gray); border-radius: 10px;" onclick="closeCustomPrompt()">Cancel</button>
-                <button class="btn" style="flex: 1; background: #10b981; border-radius: 10px;" onclick="submitCustomPrompt()">Continue</button>
+                <button class="btn" style="flex: 1; background: #e2e8f0; color: var(--text-gray); border-radius: 10px;"
+                    onclick="closeCustomPrompt()">Cancel</button>
+                <button class="btn" style="flex: 1; background: #10b981; border-radius: 10px;"
+                    onclick="submitCustomPrompt()">Continue</button>
             </div>
         </div>
     </div>
 
     <div id="toastContainer" class="toast-container"></div>
+    <div id="globalLoader" class="loader-overlay">
+        <div class="spinner"></div>
+        <p id="loaderText">Loading...</p>
+    </div>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
