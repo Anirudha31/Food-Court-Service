@@ -1,5 +1,4 @@
 const dns = require('dns');
-// Force Node to use Google's Public DNS
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 require('dotenv').config();
 const express = require('express');
@@ -26,7 +25,6 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log("DB Error:", err));
 
-// Routes
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/menu', require('./routes/menu'));

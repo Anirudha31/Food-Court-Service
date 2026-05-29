@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User'); // Double-check this path matches your folder structure
-const Menu = require('../models/Menu'); // Assuming your menu model is named 'Menu'
+const User = require('../models/User');
+const Menu = require('../models/Menu');
 
 
 // ==========================================
