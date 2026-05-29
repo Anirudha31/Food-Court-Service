@@ -10,6 +10,7 @@
   --border: #e2e8f0;
   --sidebar-width: 260px;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --red-shadow: #b91c1c1d;
 }
 
 * {
@@ -74,7 +75,8 @@ body {
   width: 100%;
 }
 
-/* Kept Nav Link Hover */
+/* hover-features */
+
 .nav-link:hover {
   background: #f1f5f9;
   color: var(--primary);
@@ -88,6 +90,10 @@ body {
 .nav-link.logout {
   margin-top: auto;
   color: var(--accent);
+}
+
+.nav-link.logout:hover {
+  background: var(--red-shadow);
 }
 
 /* --- Main Content Area --- */
