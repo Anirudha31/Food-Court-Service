@@ -1,7 +1,9 @@
-const API_BASE = window.location.hostname === 'localhost'
+// Automatically switch between local development and live relative routing
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5000/api'
-    : 'https://food-court-service.onrender.com/api';
+    : '/api'; // The magic relative path for Render
 
+// The main API handler
 const api = {
     async request(method, endpoint, data = null) {
         const token = sessionStorage.getItem('token');
@@ -36,7 +38,7 @@ const api = {
     // --- Order Methods ---
     getMyOrders: () => api.request('GET', '/orders/my-orders'),
 
-    // --- NEW: Admin User Management Methods ---
+    // --- Admin User Management Methods ---
     getUsers: () => api.request('GET', '/admin/users'),
     addUser: (userData) => api.request('POST', '/admin/users', userData),
     deleteUser: (id) => api.request('DELETE', `/admin/users/${id}`),
