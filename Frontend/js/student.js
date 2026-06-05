@@ -22,7 +22,7 @@ function getBackendURL() {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         return 'http://localhost:5000';
     }
-    return 'https://food-court-service-backend.onrender.com';
+    return 'https://food-court-service.onrender.com';
 }
 
 function showSection(sectionId) {

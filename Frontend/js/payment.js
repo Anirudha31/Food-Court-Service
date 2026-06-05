@@ -114,7 +114,7 @@ async function processPayment() {
                         if (mongoOrderId) {
                             const backendURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                                 ? 'http://localhost:5000'
-                                : 'https://food-court-service-backend.onrender.com';
+                                : 'https://food-court-service.onrender.com';
 
                             const token = sessionStorage.getItem('token');
                             await axios.patch(`${backendURL}/api/orders/${mongoOrderId}/cancel`, {}, {
@@ -166,7 +166,7 @@ async function payWithWallet() {
         // Smart URL detector
         const backendURL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5000'
-            : 'https://food-court-service-backend.onrender.com';
+            : 'https://food-court-service.onrender.com';
 
         // 1. Tell the backend to use the Wallet!
         const orderPayload = {
