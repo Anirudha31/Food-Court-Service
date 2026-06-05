@@ -14,21 +14,22 @@ const paymentRoutes = require('./routes/payment');
 const app = express();
 
 // Middleware
-app.use(express.json());
+const app = express();
+
 app.use(cors({
     origin: [
         'http://localhost:5500',
         'http://127.0.0.1:5500', 
         'https://food-court-service.onrender.com'
     ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true 
 }));
 
-// 1. Serve Static Files from the 'Frontend' folder
+app.use(express.json());
+
 app.use(express.static(path.join(__dirname, '../Frontend')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Database Connection
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB Connected"))
