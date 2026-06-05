@@ -8,14 +8,10 @@ const path = require('path');
 const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payment');
 
-
-
-
+// Initialize Express ONLY ONCE
 const app = express();
 
-// Middleware
-const app = express();
-
+// --- 1. CORS Configuration ---
 const corsOptions = {
     origin: [
         'http://localhost:5500',
@@ -27,20 +23,19 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.options('*', cors(corsOptions));
 
+// --- 2. Standard Middleware ---
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, '../Frontend')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Database Connection
+// --- 3. Database Connection ---
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log("DB Error:", err));
 
-// Routes
+// --- 4. API Routes ---
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/menu', require('./routes/menu'));
 app.use('/api/orders', require('./routes/orders'));
@@ -49,10 +44,12 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/staff', require('./routes/staff'));
 // Add other routes (users, staff) here as needed
 
-// 2. Default Route: Send users to login.html
+// --- 5. Default Route ---
+// Send users to login.html if they hit an unknown route
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../Frontend/html/login.html'));
 });
 
+// --- 6. Start Server ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
