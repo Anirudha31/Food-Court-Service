@@ -15,7 +15,16 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5500',
+        'http://127.0.0.1:5500', 
+        'https://food-court-service.onrender.com'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true 
+}));
 
 // 1. Serve Static Files from the 'Frontend' folder
 app.use(express.static(path.join(__dirname, '../Frontend')));
