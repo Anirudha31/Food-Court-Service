@@ -11,19 +11,18 @@ const paymentRoutes = require('./routes/payment');
 // Initialize Express ONLY ONCE
 const app = express();
 
-// --- 1. CORS Configuration ---
-const corsOptions = {
+// Middleware
+app.use(express.json());
+app.use(cors({
     origin: [
         'http://localhost:5500',
         'http://127.0.0.1:5500', 
         'https://food-court-service.onrender.com'
     ],
-    credentials: true,
-    optionsSuccessStatus: 200 
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true 
+}));
 
 // --- 2. Standard Middleware ---
 app.use(express.json());
