@@ -24,12 +24,12 @@ app.use(cors({
     credentials: true 
 }));
 
-// --- 2. Standard Middleware ---
 app.use(express.json());
+
 app.use(express.static(path.join(__dirname, '../Frontend')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// --- 3. Database Connection ---
+// Database Connection
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log("DB Error:", err));
