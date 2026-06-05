@@ -16,14 +16,19 @@ const app = express();
 // Middleware
 const app = express();
 
-app.use(cors({
+const corsOptions = {
     origin: [
         'http://localhost:5500',
         'http://127.0.0.1:5500', 
         'https://food-court-service.onrender.com'
     ],
-    credentials: true 
-}));
+    credentials: true,
+    optionsSuccessStatus: 200 
+};
+
+app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
