@@ -1,6 +1,6 @@
 const API_BASE = window.location.hostname === 'localhost'
     ? 'http://localhost:5000/api'
-    : 'https://food-court-service-backend.onrender.com/api';
+    : 'https://food-court-service.onrender.com/api';
 
 const api = {
     async request(method, endpoint, data = null) {
