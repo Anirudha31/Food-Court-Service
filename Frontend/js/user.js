@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'login.html';
         return;
     }
-    document.getElementById('studentName').textContent = user.name;
+    document.getElementById('userName').textContent = user.name;
 
-    const savedCart = sessionStorage.getItem('studentCart');
+    const savedCart = sessionStorage.getItem('userCart');
     if (savedCart) {
         cart = JSON.parse(savedCart);
         updateCartUI();
@@ -116,7 +116,7 @@ async function loadMenu() {
             });
         }
         grid.innerHTML = html || '<p>No items available today.</p>';
-        filterStudentMenu();
+        filterUserMenu();
 
     } catch (err) {
         grid.innerHTML = '<p>Error loading menu.</p>';
@@ -150,7 +150,7 @@ function updateItemQty(id, name, price, maxStock, change, effectivelyOpen) {
         }
     }
 
-    sessionStorage.setItem('studentCart', JSON.stringify(cart));
+    sessionStorage.setItem('userCart', JSON.stringify(cart));
 
     updateCartUI();
 
@@ -200,7 +200,7 @@ async function placeOrder() {
         showToast("Payment Successful!", "success");
 
         cart = [];
-        sessionStorage.removeItem('studentCart');
+        sessionStorage.removeItem('userCart');
         updateCartUI();
 
         showSection('orders');
@@ -352,8 +352,8 @@ function showToast(message, type = 'success') {
 // ==========================================
 //  LIVE SEARCH FILTER 
 // ==========================================
-function filterStudentMenu() {
-    const searchInput = document.getElementById('studentMenuSearch');
+function filterUserMenu() {
+    const searchInput = document.getElementById('userMenuSearch');
     if (!searchInput) return;
 
     const query = searchInput.value.toLowerCase();
@@ -381,7 +381,7 @@ function filterByCategory(categoryName, clickedButton) {
     allPills.forEach(pill => pill.classList.remove('active'));
     if (clickedButton) clickedButton.classList.add('active');
 
-    const searchInput = document.getElementById('studentMenuSearch');
+    const searchInput = document.getElementById('userMenuSearch');
     if (searchInput) searchInput.value = '';
 
     const cards = document.querySelectorAll('#menuGrid .card'); // Fixed ID

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodCourt - Dashboard</title>
-    <link rel="stylesheet" href="../css/student.css">
+    <link rel="stylesheet" href="../css/user.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
@@ -33,7 +33,7 @@
             <header class="header">
                 <div class="header-left">
                     <div class="greeting">
-                        <h2>Welcome, <span id="studentName">Student</span></h2>
+                        <h2>Welcome, <span id="userName">User</span></h2>
                         <p>What's on the menu today?</p>
                     </div>
                 </div>
@@ -46,12 +46,12 @@
             </header>
 
             <div id="menuSection">
-                <div class="student-search-header">
+                <div class="user-search-header">
                     <h2>Today's Menu</h2>
-                    <div class="student-search-wrapper">
+                    <div class="user-search-wrapper">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="studentMenuSearch" class="search-input"
-                            placeholder="What are you craving?" onkeyup="filterStudentMenu()">
+                        <input type="text" id="userMenuSearch" class="search-input"
+                            placeholder="What are you craving?" onkeyup="filterUserMenu()">
                     </div>
                 </div>
 
@@ -151,7 +151,7 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../js/api.js"></script>
-    <script src="../js/student.js"></script>
+    <script src="../js/user.js"></script>
 </body>
 
 </html>

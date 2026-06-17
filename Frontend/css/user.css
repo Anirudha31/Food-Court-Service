@@ -168,8 +168,8 @@ body {
   border: 3px solid var(--surface);
 }
 
-/* --- Student Search Header --- */
-.student-search-header {
+/* --- user Search Header --- */
+.user-search-header {
   margin-bottom: 25px;
   display: flex;
   justify-content: space-between;
@@ -178,12 +178,12 @@ body {
   gap: 15px;
 }
 
-.student-search-header h2 {
+.user-search-header h2 {
   color: var(--text-dark);
   margin: 0;
 }
 
-.student-search-wrapper {
+.user-search-wrapper {
   flex: 1;
   max-width: 400px;
   width: 100%;
@@ -469,19 +469,19 @@ body {
     border-radius: 6px;
   }
 
-  .student-search-header {
+  .user-search-header {
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 12px !important;
     margin-bottom: 20px !important;
   }
 
-  .student-search-header h2 {
+  .user-search-header h2 {
     text-align: left;
     margin: 0 !important;
   }
 
-  .student-search-wrapper {
+  .user-search-wrapper {
     max-width: 100% !important;
     width: 100% !important;
   }
