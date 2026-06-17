@@ -1,3 +1,5 @@
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 require('dotenv').config();
 const mongoose = require('mongoose');
 
@@ -54,6 +56,7 @@ const seedDatabase = async () => {
         // Clear existing data so we don't get duplicates
         await MenuItem.deleteMany({});
         await User.deleteMany({});
+        await User.syncIndexes();
         console.log("Cleared existing Menu and User collections .");
 
         // Insert Menu Items
