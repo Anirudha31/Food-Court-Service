@@ -1,7 +1,7 @@
 # Food Court Management System
 
 ## Overview
-The Food Court Management System is a full-stack , mobile-responsive web application built to digitize and streamline the food ordering process for any Food-Court or Cafe .
+The Smart Food-Court & Cafe Management System is a production-ready, full-stack web ecosystem engineered to modernize the dining and ordering experience in high-traffic cafeterias, food courts, and cafes. By replacing traditional, slow physical queues with a snappy, mobile-responsive digital pipeline, the application automates the journey from browsing a live menu to secure checkout and instant kitchen fulfillment.
 
 ## LIVE Demo
 LIVE link - [ Click here & wait sometime ](https://food-court-service.onrender.com)
