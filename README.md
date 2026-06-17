@@ -4,7 +4,7 @@
 The Food Court Management System is a full-stack , mobile-responsive web application built to digitize and streamline the food ordering process for any Food-Court or Cafe .
 
 ## LIVE Demo
-LIVE link - [Click here ](https://food-court-service.onrender.com)
+LIVE link - [ Click here & wait sometime ](https://food-court-service.onrender.com)
 **User Interface Access-> (ID - github1 )(Password - github123)
 **Staff Panel Access-> (ID - GitHubStaff )(Password - githubstaff123)
 
