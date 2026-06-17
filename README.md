@@ -29,22 +29,22 @@ LIVE link - [ Click here & wait sometime ](https://food-court-service.onrender.c
 2. Install Dependencies :
    ** Ensure you have Node.js & npm installed ,
    then go to "Backend" folder by :
-     cd Backend
+     `cd Backend`
    then install backend dependencies by : 
-     npm install or  npm i
+     `npm install` or  `npm i`
 
 3. Environment Configuration :
    Create a `.env` file in the "Backend" directory and add your MONGODB_URI , JWT_SECRET , RAZORPAY_KEY_ID , RAZORPAY_KEY_SECRET same as in `.env.example` file .
    
 4. Initial Data Entry :
-    Run ` node seed.js ` for initial data entry to database and you will get the all type of login ID & password .
+    Run ` node seed.js ` for initial data entry to database and you will get the all initial login ID & password .
 
 6. Start the Server :  
-   ` node server.js `
+    Run  ` node server.js ` for start the backend server .
    
  * The server will start and connect to MongoDB. *
 
-7. ** Access the Application : **
+7. Access the Application :
    Open your web browser and navigate to `http://localhost:5000` to view the frontend.
 
 ## Developer
