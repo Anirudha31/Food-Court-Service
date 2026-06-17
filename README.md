@@ -3,8 +3,8 @@
 ## Overview
 The Food Court Management System is a full-stack , mobile-responsive web application built to digitize and streamline the food ordering process for any Food-Court or Cafe .
 
-## LIVE Demo 
-[text](https://food-court-service.onrender.com)
+## LIVE Demo
+LIVE link - [Click here ](https://food-court-service.onrender.com)
 **User Interface Access-> (ID - github1 )(Password - github123)
 **Staff Panel Access-> (ID - GitHubStaff )(Password - githubstaff123)
 
@@ -15,9 +15,9 @@ The Food Court Management System is a full-stack , mobile-responsive web applica
  ** Database Management: ** Fully integrated with MongoDB for persistent storage of menu inventories, real-time order tracking, and secure staff credentials .
 
 ## Tech Stack
- ** Frontend :  HTML5, CSS3, Vanilla JavaScript
- ** Backend :  Node.js, Express.js
- ** Database :  MongoDB
+ ** Frontend :  HTML5, CSS3, Vanilla JavaScript---
+ ** Backend :  Node.js, Express.js---
+ ** Database :  MongoDB---
  ** Payment Gateway : Razorpay
  
 ## Installation & Setup
