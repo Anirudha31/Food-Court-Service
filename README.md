@@ -24,7 +24,7 @@ LIVE link - [ Click here & wait sometime ](https://food-court-service.onrender.c
 
 1. Clone the Repository :
    
-   git clone https://github.com/Anirudha31/Food-Court-Service.git
+   `git clone https://github.com/Anirudha31/Food-Court-Service.git`
    
 2. Install Dependencies :
    ** Ensure you have Node.js & npm installed ,
