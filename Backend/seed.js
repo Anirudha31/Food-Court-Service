@@ -21,7 +21,7 @@ const userSeedData = [
     {
         name: "Admin",
         email: "admin@gmail.com",
-        college_id: "admin1",
+        id: "admin1",
         password: "admin123",
         role: "admin",
         status: "active"
@@ -29,7 +29,7 @@ const userSeedData = [
     {
         name: "Staff",
         email: "staff@gmail.com",
-        college_id: "staff1",
+        id: "staff1",
         password: "staff123", 
         role: "staff",
         status: "active"
@@ -37,7 +37,7 @@ const userSeedData = [
     {
         name: "User",
         email: "user@gmail.com",
-        college_id: "user1",
+        id: "user1",
         password: "user123", 
         role: "user",
         status: "active",

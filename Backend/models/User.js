@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  college_id: {
+  id: {
     type: String,
     required: true,
     unique: true,

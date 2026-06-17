@@ -133,7 +133,7 @@ router.post('/verify', authenticate, [
     const qrData = {
       order_id: order.order_id,
       payer_name: req.user.name,
-      college_id: req.user.college_id,
+      id: req.user.id,
       items: order.items.map(item => ({
         dish: item.dish_name,
         qty: item.quantity

@@ -67,7 +67,7 @@ async function processPayment() {
             key: dynamicKeyId,
             amount: razorpayOrder.amount,
             currency: "INR",
-            name: "College Food Court",
+            name: "Food Court",
             description: `Order #${orderId}`,
             order_id: razorpayOrder.id,
 

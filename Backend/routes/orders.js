@@ -82,7 +82,7 @@ router.post('/', authenticate, [
         const qrData = {
             order_id: order.order_id,
             payer_name: req.user.name,
-            college_id: req.user.college_id,
+            id: req.user.id,
             items: order.items.map(item => ({ dish: item.dish_name, qty: item.quantity })),
             amount: order.total_amount,
             payment_status: 'PAID (WALLET)',
@@ -134,7 +134,7 @@ router.get('/my-orders', authenticate, async (req, res) => {
       .sort({ createdAt: -1 }) // Use createdAt for better timeline
       .skip(skip)
       .limit(parseInt(limit))
-      .populate('user_id', 'name college_id email');
+      .populate('user_id', 'name id email');
 
     const total = await Order.countDocuments(filter);
 
@@ -162,9 +162,9 @@ router.get('/:id', authenticate, async (req, res) => {
 
     let order;
     if (req.user.role === 'admin' || req.user.role === 'staff') {
-      order = await Order.findById(id).populate('user_id', 'name college_id email');
+      order = await Order.findById(id).populate('user_id', 'name id email');
     } else {
-      order = await Order.findOne({ _id: id, user_id: userId }).populate('user_id', 'name college_id email');
+      order = await Order.findOne({ _id: id, user_id: userId }).populate('user_id', 'name id email');
     }
 
     if (!order) {
@@ -262,7 +262,7 @@ router.get('/manage/all', authenticate, authorize('admin', 'staff'), async (req,
       .sort({ order_date: -1 })
       .skip(skip)
       .limit(parseInt(limit))
-      .populate('user_id', 'name college_id email role');
+      .populate('user_id', 'name id email role');
 
     const total = await Order.countDocuments(filter);
 

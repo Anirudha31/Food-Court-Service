@@ -209,7 +209,7 @@ async function loadUsers() {
         tbody.innerHTML = users.map(u => `
             <tr>
                 <td><strong>${u.name}</strong></td>
-                <td>${u.college_id}</td>
+                <td>${u.id}</td>
                 <td><span class="role-badge role-${u.role}">${u.role}</span></td>
                 <td>
                     <button class="btn btn-sm btn-danger" onclick="triggerDeleteUser('${u._id}')">
@@ -234,7 +234,7 @@ async function handleUserSubmit(event) {
 
     const userData = {
         name: document.getElementById('userName').value,
-        college_id: document.getElementById('userCollegeId').value,
+        id: document.getElementById('userId').value,
         email: document.getElementById('userEmail').value,
         password: document.getElementById('userPass').value,
         role: document.getElementById('userRole').value,

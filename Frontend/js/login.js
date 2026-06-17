@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const collegeId = document.getElementById('collegeId').value.trim();
+            const Id = document.getElementById('Id').value.trim();
             const passwordValue = document.getElementById('password').value;
             const errorMsg = document.getElementById('errorMessage');
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const responseData = await api.login({
-                    college_id: collegeId,
+                    id: Id,
                     password: passwordValue
                 });
 

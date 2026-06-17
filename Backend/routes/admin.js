@@ -23,19 +23,19 @@ router.get('/users', async (req, res) => {
 // POST: Add a new user manually from the Admin Panel
 router.post('/users', async (req, res) => {
     try {
-        const { name, college_id, email, password, role, phone, department } = req.body;
+        const { name, id, email, password, role, phone, department } = req.body;
         
         // 1. Prevent duplicate accounts
-        const existingUser = await User.findOne({ college_id });
+        const existingUser = await User.findOne({ id });
         if (existingUser) {
-            return res.status(400).json({ message: "This College ID is already registered!" });
+            return res.status(400).json({ message: "This  ID is already registered!" });
         }
 
         // 2. Create the user 
         // We provide defaults for phone and department to prevent Mongoose validation crashes
         const newUser = new User({ 
             name, 
-            college_id, 
+            id, 
             email, 
             password, // Your pre-save hook in the User model will hash this automatically
             role,

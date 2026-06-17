@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/', authenticate, authorize('admin'), [
   body('name').notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
-  body('college_id').notEmpty().withMessage('College ID is required'),
+  body('id').notEmpty().withMessage('ID is required'),
   body('role').isIn(['admin', 'user', 'staff']).withMessage('Invalid role'),
   body('status').isIn(['active', 'inactive']).withMessage('Invalid status')
 ], async (req, res) => {
@@ -18,7 +18,7 @@ router.post('/', authenticate, authorize('admin'), [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, college_id, role, status } = req.body;
+    const { name, email, id, role, status } = req.body;
 
     // Check if email already exists
     const existingEmailUser = await User.findOne({ email });
@@ -26,17 +26,17 @@ router.post('/', authenticate, authorize('admin'), [
       return res.status(400).json({ message: 'Email already exists' });
     }
 
-    // Check if college ID already exists
-    const existingCollegeIdUser = await User.findOne({ college_id });
-    if (existingCollegeIdUser) {
-      return res.status(400).json({ message: 'College ID already exists' });
+    // Check if ID already exists
+    const existingIdUser = await User.findOne({ id });
+    if (existingIdUser) {
+      return res.status(400).json({ message: 'ID already exists' });
     }
 
     // Create new user
     const user = new User({
       name,
       email,
-      college_id,
+      id,
       role,
       status,
       password: 'temp123', // Default password, should be changed
@@ -67,7 +67,7 @@ router.get('/', authenticate, authorize('admin'), async (req, res) => {
     if (search) {
       filter.$or = [
         { name: { $regex: search, $options: 'i' } },
-        { college_id: { $regex: search, $options: 'i' } },
+        { id: { $regex: search, $options: 'i' } },
         { email: { $regex: search, $options: 'i' } }
       ];
     }
@@ -249,7 +249,7 @@ router.get('/stats/overview', authenticate, authorize('admin'), async (req, res)
     const recentUsers = await User.find()
       .sort({ createdAt: -1 })
       .limit(5)
-      .select('name college_id email role status createdAt');
+      .select('name id email role status createdAt');
 
     res.json({
       message: 'User statistics retrieved successfully',

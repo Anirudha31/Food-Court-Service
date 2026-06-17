@@ -22,7 +22,7 @@ router.get('/dashboard', async (req, res) => {
       order_date: { $gte: today, $lt: tomorrow }
     })
     .sort({ order_date: -1 })
-    .populate('user_id', 'name college_id email');
+    .populate('user_id', 'name id email');
 
     const stats = {
       total: orders.length,
@@ -71,7 +71,7 @@ router.post('/verify-qr', [
 
     // Get order details
     const order = await Order.findOne({ order_id })
-      .populate('user_id', 'name college_id email role');
+      .populate('user_id', 'name id email role');
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
@@ -83,7 +83,7 @@ router.post('/verify-qr', [
     // Verify QR data matches order
     const isValidQR = 
       qrContent.payer_name === order.user_id.name &&
-      qrContent.college_id === order.user_id.college_id &&
+      qrContent.id === order.user_id.id &&
       qrContent.amount === order.total_amount &&
       qrContent.payment_status === 'PAID' &&
       order.payment_status === 'paid';
@@ -186,7 +186,7 @@ router.get('/order/:order_id', async (req, res) => {
     const { order_id } = req.params;
 
     const order = await Order.findOne({ order_id })
-      .populate('user_id', 'name college_id email role');
+      .populate('user_id', 'name id email role');
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
@@ -217,7 +217,7 @@ router.get('/orders/pending', async (req, res) => {
             order_status: { $in: ['pending', 'confirmed', 'preparing', 'ready'] } 
         })
         .sort({ order_date: -1 })
-        .populate('user_id', 'name college_id');
+        .populate('user_id', 'name id');
 
         res.json({ orders });
     } catch (error) {
@@ -238,7 +238,7 @@ router.get('/orders/served', async (req, res) => {
       order_status: 'served'
     })
     .sort({ served_date: -1 })
-    .populate('user_id', 'name college_id email');
+    .populate('user_id', 'name id email');
 
     res.json({
       message: 'Served orders retrieved successfully',
@@ -263,7 +263,7 @@ router.get('/summary', async (req, res) => {
 
     const orders = await Order.find({
       order_date: { $gte: startOfDay, $lte: endOfDay }
-    }).populate('user_id', 'name college_id email role');
+    }).populate('user_id', 'name id email role');
 
     const summary = {
       date: targetDate,

@@ -19,7 +19,7 @@ const generateToken = (userId) => {
 
 // Login user
 router.post('/login', [
-  body('college_id').notEmpty().withMessage('College ID is required'),
+  body('id').notEmpty().withMessage('ID is required'),
   body('password').notEmpty().withMessage('Password is required')
 ], async (req, res) => {
   try {
@@ -28,12 +28,12 @@ router.post('/login', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { college_id, password } = req.body;
+    const { id, password } = req.body;
 
-    // Find user by college ID
-    const user = await User.findOne({ college_id });
+    // Find user by  ID
+    const user = await User.findOne({ id });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid College ID' });
+      return res.status(401).json({ message: 'Invalid ID' });
     }
 
     // Check if user is active
@@ -57,7 +57,7 @@ router.post('/login', [
         _id: user._id,
         name: user.name,
         role: user.role,
-        college_id: user.college_id
+        id: user.id
       },
       token
     });
