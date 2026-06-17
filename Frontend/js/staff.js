@@ -169,7 +169,7 @@ async function onScanSuccess(decodedText) {
         currentScannedOrderId = liveOrder.order_id;
         
         document.getElementById('dispOrderId').innerText = liveOrder.order_id;
-        document.getElementById('dispName').innerText = liveOrder.user_id?.name || 'Student';
+        document.getElementById('dispName').innerText = liveOrder.user_id?.name || 'User';
         
         document.getElementById('dispItems').innerHTML = liveOrder.items.map(i => `
             <li style="display: grid; grid-template-columns: 1fr 70px 80px; align-items: center; padding: 14px 12px; border-bottom: 1px solid #f0f0f0;">
@@ -262,9 +262,9 @@ async function loadPendingOrders() {
                 return `${i.quantity || 1}x ${name}`;
             }).join(', ');
 
-            const studentName = (order.user_id && typeof order.user_id === 'object') 
+            const userName = (order.user_id && typeof order.user_id === 'object') 
                 ? order.user_id.name 
-                : 'Student';
+                : 'User';
 
             const orderTime = order.order_date 
                 ? new Date(order.order_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -274,7 +274,7 @@ async function loadPendingOrders() {
                 <div class="queue-item-strip" style="border-bottom: 1px solid var(--border); padding: 12px; display: flex; justify-content: space-between; align-items: center;">
                     <div class="queue-left">
                         <span class="queue-id" style="font-weight: 800; color: var(--primary);">#${order.order_id || 'N/A'}</span>
-                        <div class="queue-student" style="font-weight: 600; color: var(--text-dark);">${studentName}</div>
+                        <div class="queue-user" style="font-weight: 600; color: var(--text-dark);">${userName}</div>
                         <div class="queue-items-text" style="font-size: 0.85rem; color: var(--text-gray);">${itemsSummary}</div>
                     </div>
                     <div class="queue-right">

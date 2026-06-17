@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (userRole === 'staff') {
                     window.location.href = '../html/staff.html';
                 } else {
-                    window.location.href = '../html/student.html';
+                    window.location.href = '../html/user.html';
                 }
 
             } catch (err) {

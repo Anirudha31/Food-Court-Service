@@ -9,7 +9,7 @@ router.post('/', authenticate, authorize('admin'), [
   body('name').notEmpty().withMessage('Name is required'),
   body('email').isEmail().withMessage('Valid email is required'),
   body('college_id').notEmpty().withMessage('College ID is required'),
-  body('role').isIn(['admin', 'student', 'teacher', 'staff']).withMessage('Invalid role'),
+  body('role').isIn(['admin', 'user', 'staff']).withMessage('Invalid role'),
   body('status').isIn(['active', 'inactive']).withMessage('Invalid status')
 ], async (req, res) => {
   try {
@@ -119,7 +119,7 @@ router.get('/:id', authenticate, authorize('admin'), async (req, res) => {
 router.put('/:id', authenticate, authorize('admin'), [
   body('name').optional().notEmpty().withMessage('Name cannot be empty'),
   body('email').optional().isEmail().withMessage('Valid email is required'),
-  body('role').optional().isIn(['admin', 'student', 'teacher', 'staff']).withMessage('Invalid role'),
+  body('role').optional().isIn(['admin', 'user', 'staff']).withMessage('Invalid role'),
   body('status').optional().isIn(['active', 'inactive']).withMessage('Invalid status')
 ], async (req, res) => {
   try {

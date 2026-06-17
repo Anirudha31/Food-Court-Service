@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const pending = JSON.parse(sessionStorage.getItem('pendingOrder'));
     if (!pending || !pending.items || pending.items.length === 0) {
-        window.location.href = 'student.html';
+        window.location.href = 'user.html';
         return;
     }
     renderOrderSummary(pending);

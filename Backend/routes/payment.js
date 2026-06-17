@@ -164,7 +164,7 @@ router.post('/verify', authenticate, [
 });
 
 // ==========================================
-// 3. GET PAYMENT HISTORY (Student)
+// 3. GET PAYMENT HISTORY (User)
 // ==========================================
 
 router.get('/history', authenticate, async (req, res) => {
@@ -210,7 +210,7 @@ router.get('/:id', authenticate, async (req, res) => {
     const userId = req.user._id;
 
     let payment;
-    // Admins and staff can view any payment; Students can only view their own
+    // Admins and staff can view any payment; Users can only view their own
     if (req.user.role === 'admin' || req.user.role === 'staff') {
       payment = await Payment.findById(id);
     } else {
